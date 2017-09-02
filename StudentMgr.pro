@@ -5,6 +5,8 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += sql
+CONFIG   += c++14
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,10 +27,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    connectdialog.cpp \
+    sqlserver.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    connectdialog.h \
+    structdef.h \
+    common.h \
+    sqlbase.h \
+    sqlserver.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    connectdialog.ui
