@@ -35,8 +35,8 @@ bool SQLServer::connect()
 
     if(!db.open())
     {
-       cout<<"Database Error"<<endl;
-       cout<<db.lastError().text().toStdString()<<endl;
+       wcout<<L"Database Error"<<endl;
+       wcout<<db.lastError().text().toStdWString()<<endl;
        qDebug()<<db.lastError().text();
        return false;
     }
