@@ -1,6 +1,7 @@
 #ifndef SQLBASE_H
 #define SQLBASE_H
 #include <QString>
+//SQL ODBC abstract Class, application through abstract Class to execute SQL Command, and the SQL Server Class inherit from this abstract Class
 class SQLBase
 {
 public:
