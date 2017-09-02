@@ -2,6 +2,7 @@
 #define THDCONNECT_H
 #include "sqlbase.h"
 #include "common.h"
+#include <QThread>
 //inherit from Qthread
 class thdconnect : public QThread
 {
@@ -11,12 +12,12 @@ signals:
     //define the signal for information exchange
     void result(bool res);
 public:
-    thdconnect(QObject* par);
-    ~thdconnect();
-    void setdb(SQLBase* db);
+    void setdb(shared_ptr<SQLBase> db);
     //realize the virtual function in the QThread
-    void run();
+
 private:
-    SQLBase* sql=NULL;
+    shared_ptr<SQLBase> sql;
+protected:
+    void run();
 };
 #endif // THDCONNECT_H

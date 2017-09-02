@@ -10,6 +10,6 @@ struct LoginInfo{
 
 struct queryexchange{
     QString Type;
-    QStringList ExchangeData;
+    QStringList* ExchangeData;
 };
 #endif // STRUCTDEF_H

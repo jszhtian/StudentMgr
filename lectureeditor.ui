@@ -21,7 +21,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Select:</string>
+          <string>University</string>
          </property>
         </widget>
        </item>
@@ -276,7 +276,17 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="LectureView"/>
+      <widget class="QListView" name="LectureView">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::SingleSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

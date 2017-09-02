@@ -16,9 +16,14 @@ class LectureEditor : public QWidget
 public:
     explicit LectureEditor(QWidget *parent = 0);
     ~LectureEditor();
+    void initDB(shared_ptr<SQLBase> setdb);
+
+private slots:
+    void on_UniSelect_activated(const QString &arg1);
 
 private:
     Ui::LectureEditor *ui;
+    shared_ptr<SQLBase> db;
 };
 
 #endif // LECTUREEDITOR_H

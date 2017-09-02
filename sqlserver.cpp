@@ -60,7 +60,7 @@ bool SQLServer::disconnect()
 
 }
 
-QSqlDatabase SQLServer::getdb()
+inline QSqlDatabase SQLServer::getdb()
 {
     return db;
 }

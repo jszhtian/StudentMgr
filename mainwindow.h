@@ -21,7 +21,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    SQLBase* sqldb=NULL;
+
     ~MainWindow();
     void recvconnectsignal(bool result);
 
@@ -33,6 +33,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    shared_ptr<SQLBase> sqldb;
     bool connectstatus=false;
 };
 

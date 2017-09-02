@@ -1,18 +1,8 @@
 #include "thdconnect.h"
 
-thdconnect::thdconnect(QObject* par):QThread(par)
+void thdconnect::setdb(shared_ptr<SQLBase> db)
 {
-    sql=NULL;
-}
-
-thdconnect::~thdconnect()
-{
-    sql=NULL;
-}
-
-void thdconnect::setdb(SQLBase *db)
-{
-    if (db!=NULL){
+    if (db.get()!=NULL){
         sql=db;
     }
 
@@ -20,7 +10,7 @@ void thdconnect::setdb(SQLBase *db)
 
 void thdconnect::run()
 {
-    if(sql!=NULL){
+    if(sql.get()!=NULL){
         try{
             int res=sql->connect();
             emit result(res);
