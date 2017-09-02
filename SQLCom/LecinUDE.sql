@@ -3,7 +3,7 @@ GO
 CREATE TABLE [LectureinUDE]
 (
 	[LectureUUID] [uniqueidentifier] NOT NULL Default(newsequentialid()),
-	[LectureName] [nvarchar](50) NOT NULL,
+	[LectureName] [nvarchar](50) NOT NULL Unique,
 	[Module] [int] NOT NULL,
 	[Semester] [int] NOT NULL,	
 	[EACTSCredit] [float] NOT NULL,

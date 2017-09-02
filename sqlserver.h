@@ -1,10 +1,8 @@
-#ifndef SQLSERVER_H
+﻿#ifndef SQLSERVER_H
 #define SQLSERVER_H
 #include "sqlbase.h"
-#include <QtSql>
-#include <QMessageBox>
-#include <QDebug>
 #include <common.h>
+
 class SQLServer:public SQLBase
 {
 public:
@@ -17,6 +15,7 @@ public:
     virtual ~SQLServer();
     bool connect();
     bool disconnect();
+    QSqlDatabase getdb();
 private:
     QSqlDatabase db;
     QString dsn;

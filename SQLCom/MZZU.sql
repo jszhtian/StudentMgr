@@ -2,7 +2,7 @@ USE [ZZU-DB]
 GO
 CREATE TABLE [MajorinZZU](
 	[MajorUUID] [uniqueidentifier] NOT NULL Default(newsequentialid()),
-	[MajorName] [nvarchar](50) NOT NULL,
+	[MajorName] [nvarchar](50) NOT NULL Unique,
 	[Supervisor] [nvarchar](50) NOT NULL,
 	[MajorinUDE] [uniqueidentifier] NOT NULL,
 	Primary Key([MajorUUID]),

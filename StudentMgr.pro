@@ -29,7 +29,11 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     connectdialog.cpp \
-    sqlserver.cpp
+    sqlserver.cpp \
+    lectureeditor.cpp \
+    thdconnect.cpp \
+    thdsqlexec.cpp \
+    sqlfactory.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,8 +41,18 @@ HEADERS += \
     structdef.h \
     common.h \
     sqlbase.h \
-    sqlserver.h
+    sqlserver.h \
+    lectureeditor.h \
+    thdconnect.h \
+    thdsqlexec.h \
+    sqlfactory.h \
+    sqlcommandbase.h
 
 FORMS += \
         mainwindow.ui \
-    connectdialog.ui
+    connectdialog.ui \
+    lectureeditor.ui
+
+#win32:CONFIG += console
+#for debug output!
+#remove it when use release mode

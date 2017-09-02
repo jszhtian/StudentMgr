@@ -1,4 +1,4 @@
-#include "sqlserver.h"
+﻿#include "sqlserver.h"
 
 SQLServer::~SQLServer()
 {
@@ -32,11 +32,12 @@ bool SQLServer::connect()
     db.setUserName(UserName);
     db.setPassword(Password);
     //try to establish odbc connect
+
     if(!db.open())
     {
-       qDebug()<<"Database Error"<<endl;
+       cout<<"Database Error"<<endl;
+       cout<<db.lastError().text().toStdString()<<endl;
        qDebug()<<db.lastError().text();
-       QMessageBox::critical(NULL,"Error",db.lastError().text());
        return false;
     }
     else
@@ -53,11 +54,14 @@ bool SQLServer::disconnect()
     }
     catch(exception& e)
     {
-        string err=e.what();
-        QString info=QString::fromStdString(err);
-        QMessageBox::critical(NULL,"Error",info);
+        cout<<e.what()<<endl;
         return false;
     }
 
+}
+
+QSqlDatabase SQLServer::getdb()
+{
+    return db;
 }
 
