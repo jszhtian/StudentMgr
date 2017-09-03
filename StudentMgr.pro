@@ -33,7 +33,8 @@ SOURCES += \
     lectureeditor.cpp \
     thdconnect.cpp \
     thdsqlexec.cpp \
-    sqlfactory.cpp
+    sqlfactory.cpp \
+    myprodlg.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,7 +47,8 @@ HEADERS += \
     thdconnect.h \
     thdsqlexec.h \
     sqlfactory.h \
-    sqlcommandbase.h
+    sqlcommandbase.h \
+    myprodlg.h
 
 FORMS += \
         mainwindow.ui \

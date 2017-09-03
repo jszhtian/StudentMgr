@@ -78,14 +78,18 @@ void MainWindow::on_actionConnect_triggered()
             sqldb=shared_ptr<SQLServer>(new SQLServer(SerInfo->qStr_Address,SerInfo->qStr_Username,SerInfo->qStr_Password));
             //auto dbres=sqldb->connect();
             //set profressdialog
-            QProgressDialog progressDlg(this);
+            MyProdlg prodlg;
+            /*
+             *  QProgressDialog progressDlg(this);
             progressDlg.setWindowModality(Qt::WindowModal);
             progressDlg.setMinimum(0);
             progressDlg.setMaximum(0);
             progressDlg.setLabelText("Connecting...");
             progressDlg.setCancelButton(0);
             progressDlg.setWindowFlags(progressDlg.windowFlags()&~Qt::WindowCloseButtonHint);
-            progressDlg.show();
+            */
+
+            prodlg.show();
             //change to multi thread method
             auto m_thread=new thdconnect();
             //connect thread signal->mainwindow slot
@@ -97,7 +101,7 @@ void MainWindow::on_actionConnect_triggered()
             {
                 qApp->processEvents();
             }
-            progressDlg.close();
+            prodlg.close();
 
             //disconnect signal/slot connect
             disconnect(m_thread,&thdconnect::result,this,&MainWindow::recvconnectsignal);

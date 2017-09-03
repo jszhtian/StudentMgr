@@ -2,6 +2,8 @@
 #define COMMON_H
 //define common C++ header
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <memory>
 #include <exception>
 using namespace std;

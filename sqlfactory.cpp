@@ -10,14 +10,14 @@ bool listlecture::inputdata(shared_ptr<queryexchange> input)
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
-        Query.prepare("select [LectureUUID],[LectureName],[Type],[Module],[CreditinZZU],[Teachinghours] from [ZZU-DB].[dbo].[LectureinZZU]");
+        Query.prepare("select [LectureUUID],[LectureName],[Type],[Module],[CreditinUDE],[Teachinghours] from [ZZU-DB].[dbo].[LectureinZZU]");
         Uni="ZZU";
         return true;
     }
     if(input->ExchangeData->at(0)=="UDE")
     {
-        Query.prepare("select [LectureUUID],[LectureName],[Module],[Semester],[EACTSCredit],[Teachinghours] from [ZZU-DB].[dbo].[LectureinUDE]");
-        Uni="DUE";
+        Query.prepare("select [LectureUUID],[LectureName],[Semester],[Module],[EACTSCredit],[Teachinghours] from [ZZU-DB].[dbo].[LectureinUDE]");
+        Uni="UDE";
         return true;
     }
     return false;
@@ -63,25 +63,17 @@ bool listlecture::outputdata(shared_ptr<queryexchange> output)
     }
 }
 
-inline void listlecture::setdb(QSqlDatabase *setdb)
+inline void listlecture::setdb(QSqlDatabase setdb)
 {
     db=setdb;
 }
 
 bool listlecture::exec()
 {
-    QProgressDialog progressDlg;
-    progressDlg.setWindowModality(Qt::WindowModal);
-    progressDlg.setMinimum(0);
-    progressDlg.setMaximum(0);
-    progressDlg.setLabelText("Listing...");
-    progressDlg.setCancelButton(0);
-    progressDlg.setWindowFlags(progressDlg.windowFlags()&~Qt::WindowCloseButtonHint);
-    progressDlg.show();
+    MyProdlg dlg;
     //change to multi thread method
     auto m_thread=new thdSQLExec();
-    //connect thread signal->mainwindow slot
-    m_thread->setDatebase(db);
+    m_thread->setDatebase(&db);
     m_thread->setquery(&Query);
     m_thread->start();
     //m_thread->wait();
@@ -89,7 +81,15 @@ bool listlecture::exec()
     {
         qApp->processEvents();
     }
-    progressDlg.close();
+    dlg.close();
     return m_thread->getresult();
-    //disconnect signal/slot connect
+}
+
+SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
+{
+    if(COMname.toLower()=="listlecture")
+    {
+        return new listlecture;
+    }
+    return NULL;
 }

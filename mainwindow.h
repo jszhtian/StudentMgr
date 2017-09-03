@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QProgressDialog>
+#include "myprodlg.h"
 #include "structdef.h"
 #include "common.h"
 #include "connectdialog.h"

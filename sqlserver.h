@@ -12,7 +12,7 @@ public:
         UserName=USN;
         Password=PWD;
     }
-    virtual ~SQLServer();
+    ~SQLServer();
     bool connect();
     bool disconnect();
     QSqlDatabase getdb();

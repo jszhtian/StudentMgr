@@ -6,7 +6,7 @@ CREATE TABLE [LectureinZZU]
 	[LectureName] [nvarchar](50) NOT NULL Unique,
 	[Type] [nvarchar](50) NOT NULL,
 	[Module] [int] NOT NULL,	
-	[CreditinZZU] [float] NOT NULL,
+	[CreditinUDE] [float] NOT NULL,
 	[Teachinghours] [int] NOT NULL,
 Primary Key([LectureUUID])
 )

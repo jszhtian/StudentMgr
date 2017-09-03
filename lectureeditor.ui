@@ -44,7 +44,7 @@
          <item>
           <layout class="QGridLayout" name="gridLayout">
            <item row="4" column="1">
-            <widget class="QComboBox" name="TypeSelect">
+            <widget class="QComboBox" name="Typebox">
              <item>
               <property name="text">
                <string>Sprachkurs</string>
@@ -141,28 +141,28 @@
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="InsertButton">
            <property name="text">
             <string>Insert</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="DelButton">
            <property name="text">
             <string>Delete</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QPushButton" name="pushButton_4">
+          <widget class="QPushButton" name="UpdateButton">
            <property name="text">
             <string>Update</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QPushButton" name="pushButton_5">
+          <widget class="QPushButton" name="ExportButton">
            <property name="text">
             <string>Export</string>
            </property>
@@ -223,7 +223,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="OperationBox">
          <item>
           <property name="text">
            <string>==</string>
@@ -267,7 +267,7 @@
         <widget class="QLineEdit" name="conditionEditor"/>
        </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="ReFButton">
          <property name="text">
           <string>Refresh</string>
          </property>
@@ -276,7 +276,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="LectureView">
+      <widget class="QTableView" name="LectureView">
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
