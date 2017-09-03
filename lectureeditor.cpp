@@ -21,6 +21,7 @@ LectureEditor::LectureEditor(QWidget *parent) :
         ui->Typebox->setEnabled(false);
         ui->SemesterEditor->setEnabled(true);
     }
+    connect(ui->LectureView->horizontalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(slot_sortbyColumn(int)));
 }
 
 LectureEditor::~LectureEditor()
@@ -154,4 +155,102 @@ void LectureEditor::on_ReFButton_clicked()
     {
         GetList();
     }
+}
+
+void LectureEditor::on_LectureView_clicked(const QModelIndex &index)
+{
+    auto UniSel=ui->UniSelect->currentText();
+    if(UniSel=="University Duisburg-Essen")
+    {
+       ui->NameEditor->setText(TableModel->item(index.row(),1)->text());
+       ui->Teachinghours->setText(TableModel->item(index.row(),5)->text());
+       ui->ModuleEditor->setText(TableModel->item(index.row(),3)->text());
+       ui->Credit->setText(TableModel->item(index.row(),4)->text());
+       ui->SemesterEditor->setText(TableModel->item(index.row(),2)->text());
+
+       SQLFactory factory;
+       SQLCommandBase* listlecture=factory.CreateSQLCommand("listlecturemap");
+       auto input=shared_ptr<queryexchange>(new queryexchange);
+       auto inputlist=new QStringList;
+       input->Type="ListLectureMap";
+       inputlist->append("UDE");
+       inputlist->append(TableModel->item(index.row(),0)->text());
+       input->ExchangeData=inputlist;
+       listlecture->inputdata(input);
+       listlecture->setdb(db->getdb());
+       auto res=listlecture->exec();
+       if (res)
+       {
+           auto output=shared_ptr<queryexchange>(new queryexchange);
+           auto outputlist=new QStringList;
+           output->ExchangeData=outputlist;
+           listlecture->outputdata(output);
+           int capsize=output->ExchangeData->size();
+           QString Str;
+           for(int i=0;i<capsize;i++)
+           {
+               Str+=output->ExchangeData->at(i);
+               Str+=";";
+           }
+           ui->MapEditor->setText(Str);
+       }
+       else
+       {
+           QMessageBox::critical(NULL,"Error","SQL command execute failed!");
+       }
+    }
+    if(UniSel=="University ZhengZhou")
+    {
+        ui->NameEditor->setText(TableModel->item(index.row(),1)->text());
+        ui->Teachinghours->setText(TableModel->item(index.row(),5)->text());
+        ui->ModuleEditor->setText(TableModel->item(index.row(),3)->text());
+        ui->Credit->setText(TableModel->item(index.row(),4)->text());
+        QString getType=TableModel->item(index.row(),2)->text();
+        int Index=-1;
+        Index=ui->Typebox->findText(getType);
+        if(Index!=-1)
+        {
+            ui->Typebox->setCurrentIndex(Index);
+        }
+        else
+        {
+            std::cout<<"Unexpected Type!"<<endl;
+            QMessageBox::critical(NULL,"Error","Unexpected Type!");
+        }
+        SQLFactory factory;
+        SQLCommandBase* listlecture=factory.CreateSQLCommand("listlecturemap");
+        auto input=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlist=new QStringList;
+        input->Type="ListLectureMap";
+        inputlist->append("ZZU");
+        inputlist->append(TableModel->item(index.row(),0)->text());
+        input->ExchangeData=inputlist;
+        listlecture->inputdata(input);
+        listlecture->setdb(db->getdb());
+        auto res=listlecture->exec();
+        if (res)
+        {
+            auto output=shared_ptr<queryexchange>(new queryexchange);
+            auto outputlist=new QStringList;
+            output->ExchangeData=outputlist;
+            listlecture->outputdata(output);
+            int capsize=output->ExchangeData->size();
+            QString Str;
+            for(int i=0;i<capsize;i++)
+            {
+                Str+=output->ExchangeData->at(i);
+                Str+=";";
+            }
+            ui->MapEditor->setText(Str);
+        }
+        else
+        {
+            QMessageBox::critical(NULL,"Error","SQL command execute failed!");
+        }
+    }
+}
+
+void LectureEditor::slot_sortbyColumn(int column)
+{
+    ui->LectureView->sortByColumn(column);
 }

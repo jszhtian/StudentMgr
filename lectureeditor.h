@@ -29,6 +29,9 @@ private slots:
 
     void on_ReFButton_clicked();
 
+    void on_LectureView_clicked(const QModelIndex &index);
+    void slot_sortbyColumn(int);
+
 private:
     void fillthemodel(QStringList* list);
     void GetList();

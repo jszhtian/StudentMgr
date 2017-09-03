@@ -34,7 +34,21 @@ public:
     void setdb(QSqlDatabase setdb);
     bool exec();
 private:
-    QStringList* outputlist;
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
+
+class listLectureMap:public SQLCommandBase
+{
+public:
+    //input:Type=ListLectureMap&data0=ZZU|UDE+data1=LectureUUID
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:Type=ListLectureMap||UDELecture&data is lecture information
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
     QSqlDatabase db;
     QSqlQuery Query;
     QString Uni;
