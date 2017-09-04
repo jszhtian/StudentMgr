@@ -2,7 +2,7 @@
 
 inline bool insertSecurityCheck(QString Str)
 {
-    return !(Str.contains(";")||Str.contains(",")||Str.contains(".")||Str.contains("}")||Str.contains(")")||Str.contains("]"));
+    return !(Str.contains(";")||Str.contains(",")||Str.contains("}")||Str.contains(")")||Str.contains("]"));
 }
 
 bool listlecture::inputdata(shared_ptr<queryexchange> input)
@@ -98,6 +98,23 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
     {
         return new listLectureMap;
     }
+    if(COMname.toLower()=="listlectureuid")
+    {
+        return new listlectureuid;
+    }
+    if(COMname.toLower()=="insertlecture")
+    {
+        return new insertlecture;
+    }
+    if(COMname.toLower()=="deletelecture")
+    {
+        return new deletelecture;
+    }
+    if(COMname.toLower()=="updatelecture")
+    {
+        return new updatelecture;
+    }
+
     return NULL;
 }
 
@@ -170,6 +187,430 @@ void listLectureMap::setdb(QSqlDatabase setdb)
 }
 
 bool listLectureMap::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool listlectureuid::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="listlectureuid")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        Query.prepare("select [LectureUUID],[LectureName] from [ZZU-DB].[dbo].[LectureinUDE]");
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        Query.prepare("select [LectureUUID],[LectureName] from [ZZU-DB].[dbo].[LectureinZZU]");
+    }
+    return false;
+}
+
+bool listlectureuid::outputdata(shared_ptr<queryexchange> output)
+{
+    if(Uni.isEmpty())
+    {
+        return false;
+    }
+    if(Uni=="ZZU")
+    {
+        output->Type="ZZULecture";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified()+",";
+            result+=Query.value(1).toString().simplified();
+            output->ExchangeData->append(result);
+        }
+    }
+    if(Uni=="UDE")
+    {
+        output->Type="UDELecture";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified()+",";
+            result+=Query.value(1).toString().simplified();
+            output->ExchangeData->append(result);
+        }
+    }
+    return false;
+}
+
+void listlectureuid::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool listlectureuid::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool insertlecture::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="insertlecture")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        if(input->ExchangeData->size()!=6)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        QString LectureName=input->ExchangeData->at(1);
+        QString Semester=input->ExchangeData->at(2);
+        QString Module=input->ExchangeData->at(3);
+        QString EACTSCredit=input->ExchangeData->at(4);
+        QString Teachinghours=input->ExchangeData->at(5);
+        if(!insertSecurityCheck(LectureName))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Semester))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Module))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(EACTSCredit))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Teachinghours))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("INSERT INTO [dbo].[LectureinUDE]([LectureName],[Module],[Semester],[EACTSCredit],[Teachinghours])VALUES(:LectureName,:Module,:Semester,:EACTSCredit,:Teachinghours)");
+        Query.bindValue(0,LectureName);
+        Query.bindValue(1,Module.toInt());
+        Query.bindValue(2,Semester.toInt());
+        Query.bindValue(3,EACTSCredit.toDouble());
+        Query.bindValue(4,Teachinghours.toInt());
+
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        if(input->ExchangeData->size()!=6)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        QString LectureName=input->ExchangeData->at(1);
+        QString Type=input->ExchangeData->at(2);
+        QString Module=input->ExchangeData->at(3);
+        QString CreditinUDE=input->ExchangeData->at(4);
+        QString Teachinghours=input->ExchangeData->at(5);
+        if(!insertSecurityCheck(LectureName))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Type))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Module))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(CreditinUDE))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Teachinghours))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("INSERT INTO [dbo].[LectureinZZU]([LectureName],[Module],[Type],[CreditinUDE],[Teachinghours])VALUES(:LectureName,:Module,:Type,:CreditinUDE,:Teachinghours)");
+        Query.bindValue(0,LectureName);
+        Query.bindValue(1,Module.toInt());
+        Query.bindValue(2,Type);
+        Query.bindValue(3,CreditinUDE.toDouble());
+        Query.bindValue(4,Teachinghours.toInt());
+
+    }
+    return false;
+}
+
+bool insertlecture::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void insertlecture::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool insertlecture::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool deletelecture::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="deletelecture")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        Query.prepare("DELETE FROM [dbo].[LectureinUDE] where [LectureUUID]=:UID");
+        QString tmp=input->ExchangeData->at(1);
+        if(!insertSecurityCheck(tmp))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.bindValue(0,tmp);
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        Query.prepare("DELETE FROM [dbo].[LectureinZZU] where [LectureUUID]=:UID");
+        QString tmp=input->ExchangeData->at(1);
+        if(!insertSecurityCheck(tmp))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.bindValue(0,tmp);
+    }
+    return false;
+}
+
+bool deletelecture::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void deletelecture::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool deletelecture::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool updatelecture::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="updatelecture")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        if(input->ExchangeData->size()!=7)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        QString LectureName=input->ExchangeData->at(1);
+        QString Semester=input->ExchangeData->at(2);
+        QString Module=input->ExchangeData->at(3);
+        QString EACTSCredit=input->ExchangeData->at(4);
+        QString Teachinghours=input->ExchangeData->at(5);
+        QString UID=input->ExchangeData->at(6);
+        if(!insertSecurityCheck(LectureName))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Semester))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Module))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(EACTSCredit))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Teachinghours))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(UID))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("UPDATE [dbo].[LectureinUDE] SET [LectureName] = :Name,[Module] = :Module,[Semester] = :semester ,[EACTSCredit] = :credit,[Teachinghours] = :hours WHERE [LectureUUID]=:UID");
+        Query.bindValue(0,LectureName);
+        Query.bindValue(1,Module.toInt());
+        Query.bindValue(2,Semester.toInt());
+        Query.bindValue(3,EACTSCredit.toDouble());
+        Query.bindValue(4,Teachinghours.toInt());
+        Query.bindValue(5,UID);
+
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        if(input->ExchangeData->size()!=7)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        QString LectureName=input->ExchangeData->at(1);
+        QString Type=input->ExchangeData->at(2);
+        QString Module=input->ExchangeData->at(3);
+        QString CreditinUDE=input->ExchangeData->at(4);
+        QString Teachinghours=input->ExchangeData->at(5);
+        QString UID=input->ExchangeData->at(6);
+        if(!insertSecurityCheck(LectureName))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Type))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Module))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(CreditinUDE))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(Teachinghours))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(UID))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("UPDATE [dbo].[LectureinZZU]   SET [LectureName] = :Name,[Type] = :type,[Module] = :module,[CreditinUDE] = :credit,[Teachinghours] = :hour WHERE [LectureUUID]=:UID");
+        Query.bindValue(0,LectureName);
+        Query.bindValue(1,Type);
+        Query.bindValue(2,Module.toInt());
+        Query.bindValue(3,CreditinUDE.toDouble());
+        Query.bindValue(4,Teachinghours.toInt());
+        Query.bindValue(5,UID);
+
+    }
+    return false;
+}
+
+bool updatelecture::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void updatelecture::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool updatelecture::exec()
 {
     MyProdlg dlg;
     //change to multi thread method

@@ -7,6 +7,9 @@
 #include "sqlbase.h"
 #include "sqlfactory.h"
 #include <QStandardItemModel>
+#include <QSortFilterProxyModel>
+#include <QFile>
+#include <QFileDialog>
 
 namespace Ui {
 class LectureEditor;
@@ -25,19 +28,27 @@ public:
 
 private slots:
     void on_UniSelect_activated(const QString &arg1);
-
-
     void on_ReFButton_clicked();
-
     void on_LectureView_clicked(const QModelIndex &index);
     void slot_sortbyColumn(int);
 
+    void on_InsertButton_clicked();
+
+    void on_DelButton_clicked();
+
+    void on_UpdateButton_clicked();
+
+    void on_ExportButton_clicked();
+
 private:
     void fillthemodel(QStringList* list);
+    void updateLectureUIDmap();
     void GetList();
     Ui::LectureEditor *ui;
     shared_ptr<SQLBase> db;
     QStandardItemModel* TableModel=NULL;
+    std::map<string,string> UDElectMap;
+    std::map<string,string> ZZUlectMap;
 };
 
 #endif // LECTUREEDITOR_H

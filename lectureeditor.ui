@@ -213,6 +213,11 @@
            <string>Module</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>Semester</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="1" column="0">
@@ -252,6 +257,11 @@
          <item>
           <property name="text">
            <string>&lt;=</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>LIKE</string>
           </property>
          </item>
         </widget>

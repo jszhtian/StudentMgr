@@ -78,7 +78,7 @@ void MainWindow::on_actionConnect_triggered()
             sqldb=shared_ptr<SQLServer>(new SQLServer(SerInfo->qStr_Address,SerInfo->qStr_Username,SerInfo->qStr_Password));
             //auto dbres=sqldb->connect();
             //set profressdialog
-            MyProdlg prodlg;
+            MyProdlg prodlg(this);
             /*
              *  QProgressDialog progressDlg(this);
             progressDlg.setWindowModality(Qt::WindowModal);

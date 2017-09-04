@@ -12,18 +12,6 @@ public:
     SQLCommandBase* CreateSQLCommand(QString COMname);
 };
 
-class liststudent:public SQLCommandBase
-{
-public:
-    ~liststudent();
-    bool inputdata(shared_ptr<queryexchange> input);
-    bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QStringList* outputlist;
-};
-
 class listlecture:public SQLCommandBase
 {
 public:
@@ -53,4 +41,84 @@ private:
     QSqlQuery Query;
     QString Uni;
 };
+
+
+class listlectureuid:public SQLCommandBase
+{
+public:
+    //input:Type=listlectureuid&data=ZZU||UDE
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:Type=ZZULecture||UDELecture&data is lecture information
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
+
+class insertlecture:public SQLCommandBase
+{
+public:
+    //input:Type=insertlecture&data=ZZU||UDE&data1=Lecture infor Strings
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:Type=None
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
+
+class deletelecture:public SQLCommandBase
+{
+public:
+    //input:Type=deletelecture&data=ZZU||UDE&data1=Lecture UUID
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:None
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
+
+class updatelecture:public SQLCommandBase
+{
+public:
+    //input:Type=updatelecture&data=ZZU||UDE&data1=Lecture infor Strings
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:None
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
+
+/*
+class updatelecturemap:public SQLCommandBase
+{
+public:
+    //input:Type=updatelecturemap&data=ZZU||UDE&data1=Lecture UUID&data2=NULL/Mapping UIDs
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:None
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
+//Nest Transaction problem!
+*/
+
 #endif // SQLFACTORY_H
