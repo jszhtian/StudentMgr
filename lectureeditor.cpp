@@ -1,6 +1,8 @@
-#include "lectureeditor.h"
+﻿#include "lectureeditor.h"
 #include "ui_lectureeditor.h"
-
+#if _MSC_VER >= 1600
+#pragma execution_character_set("utf-8")
+#endif
 LectureEditor::LectureEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LectureEditor)
@@ -510,5 +512,44 @@ void LectureEditor::on_UpdateButton_clicked()
 
 void LectureEditor::on_ExportButton_clicked()
 {
-    QFile file;
+    QFileDialog* fileDialog=new QFileDialog(this);
+    fileDialog->setWindowTitle("Export CSV File");
+    fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog->setNameFilter("CSV File(*.csv)");
+    fileDialog->setDirectory(".");
+    if(fileDialog->exec() == QDialog::Accepted)
+    {
+        QString path=fileDialog->selectedFiles()[0];
+        QFile csvfile(path);
+        if(!csvfile.open(QIODevice::WriteOnly|QIODevice::Text))
+        {
+            QMessageBox::information(NULL, "IO Error", "Access denied!");
+        }
+        QTextStream out(&csvfile);
+        out.setCodec("UTF-8");
+        auto UniSel=ui->UniSelect->currentText();
+        if(UniSel=="University Duisburg-Essen")
+        {
+            out<<"LectureName,Semester,Module,Credit,Teachinghours\n";
+        }
+        if(UniSel=="University ZhengZhou")
+        {
+            out<<"LectureName,Type,Module,Credit,Teachinghours\n";
+        }
+        for(int i=0;i<TableModel->rowCount();++i)
+        {
+            for(int j=1;j<TableModel->columnCount();j++)
+            {
+                out<<TableModel->item(i,j)->text()<<",";
+            }
+            out<<"\n";
+        }
+        csvfile.close();
+        QMessageBox::information(NULL, "Export", "Export finish!");
+    }
+    else
+    {
+        QMessageBox::information(NULL, "Export", "Nothing Exported!");
+    }
+    delete fileDialog;
 }
