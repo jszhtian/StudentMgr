@@ -27,6 +27,20 @@ private:
     QString Uni;
 };
 
+class listmajor:public SQLCommandBase
+{
+public:
+    //input:Type=listmajor&data=ZZU||UDE
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:Type=ZZUlistmajor||UDElistmajor&data is lecture information
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
 
 class listLectureMap:public SQLCommandBase
 {
@@ -51,6 +65,21 @@ public:
     //input:Type=listlectureuid&data=ZZU||UDE
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ZZULecture||UDELecture&data is lecture information
+    bool outputdata(shared_ptr<queryexchange> output);
+    void setdb(QSqlDatabase setdb);
+    bool exec();
+private:
+    QSqlDatabase db;
+    QSqlQuery Query;
+    QString Uni;
+};
+
+class listmajoruid:public SQLCommandBase
+{
+public:
+    //input:Type=listmajoruid&data=ZZU||UDE
+    bool inputdata(shared_ptr<queryexchange> input);
+    //Output:Type=ZZUMajor||UDEmajor&data is lecture information
     bool outputdata(shared_ptr<queryexchange> output);
     void setdb(QSqlDatabase setdb);
     bool exec();

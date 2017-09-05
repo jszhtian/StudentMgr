@@ -19,6 +19,7 @@ public:
     ~lectureselectDialog();
     void SetUni(QString);
     QString getSelectName();
+    QString getSelectUID();
     void initDB(shared_ptr<SQLBase> setdb);
 
 private slots:
@@ -28,6 +29,7 @@ private:
     Ui::lectureselectDialog *ui;
     shared_ptr<SQLBase> db;
     QString Uni;
+    std::map<string,string> LecturMap;
 };
 
 #endif // LECTURESELECTDIALOG_H

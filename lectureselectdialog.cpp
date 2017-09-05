@@ -23,6 +23,22 @@ QString lectureselectDialog::getSelectName()
     return ui->LecSel->currentText();
 }
 
+QString lectureselectDialog::getSelectUID()
+{
+    string key=ui->LecSel->currentText().toStdString();
+    auto itr=LecturMap.find(key);
+    if(itr==LecturMap.end())
+    {
+        wcout<<"Can not find pair in LecturMap!"<<endl;
+        qDebug()<<"Can not find pair in LecturMap!";
+        return NULL;
+    }
+    else
+    {
+        return QString::fromStdString(itr->second);
+    }
+}
+
 void lectureselectDialog::initDB(shared_ptr<SQLBase> setdb)
 {
     db=setdb;
@@ -30,6 +46,8 @@ void lectureselectDialog::initDB(shared_ptr<SQLBase> setdb)
 
 void lectureselectDialog::on_pushButton_clicked()
 {
+    ui->LecSel->clear();
+    LecturMap.clear();
     if(Uni=="ZZU")
     {
             SQLFactory factory;
@@ -63,6 +81,7 @@ void lectureselectDialog::on_pushButton_clicked()
                     UID=attrs.at(0);
                     LectName=attrs.at(1);
                     ui->LecSel->addItem(LectName);
+                    LecturMap.insert(pair<string,string>(LectName.toStdString(),UID.toStdString()));
                 }
             }
     }
@@ -104,6 +123,7 @@ void lectureselectDialog::on_pushButton_clicked()
                     UID=attrs.at(0);
                     LectName=attrs.at(1);
                     ui->LecSel->addItem(LectName);
+                    LecturMap.insert(pair<string,string>(LectName.toStdString(),UID.toStdString()));
                 }
             }
     }

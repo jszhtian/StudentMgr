@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "lectureselectdialog.h"
 #include <QMessageBox>
+#include "common.h"
 
 namespace Ui {
 class LectureMapDialog;
@@ -24,11 +25,14 @@ private slots:
 
     void on_RefreshButton_clicked();
 
+    void on_delBut_clicked();
+
 private:
     Ui::LectureMapDialog *ui;
     shared_ptr<SQLBase> db;
     QString Uni;
     QString lectUID;
+    std::map<string,string> lectureMap;
 };
 
 #endif // LECTUREMAPDIALOG_H

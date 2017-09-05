@@ -636,3 +636,305 @@ bool listLectureMap::exec()
     dlg.close();
     return m_thread->getresult();
 }
+
+bool insertlecturemap::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="insertlecturemap")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        QString UID1=input->ExchangeData->at(1);
+        QString UID2=input->ExchangeData->at(2);
+        if(!insertSecurityCheck(UID1))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(UID2))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("INSERT INTO [dbo].[LectureMap]([ZZULectureUUID],[UDELectureUUID])VALUES(:UID1,:UID2)");
+        Query.bindValue(0,UID2);
+        Query.bindValue(1,UID1);
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        QString UID1=input->ExchangeData->at(1);
+        QString UID2=input->ExchangeData->at(2);
+        if(!insertSecurityCheck(UID1))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(UID2))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("INSERT INTO [dbo].[LectureMap]([ZZULectureUUID],[UDELectureUUID])VALUES(:UID1,:UID2)");
+        Query.bindValue(0,UID1);
+        Query.bindValue(1,UID2);
+    }
+    return false;
+}
+
+bool insertlecturemap::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void insertlecturemap::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool insertlecturemap::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool deletelecturemap::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="deletelecturemap")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        QString UID1=input->ExchangeData->at(1);
+        QString UID2=input->ExchangeData->at(2);
+        if(!insertSecurityCheck(UID1))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(UID2))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("DELETE FROM [dbo].[LectureMap]WHERE UDELectureUUID=:UID1 and ZZULectureUUID=:UID2");
+        Query.bindValue(0,UID1);
+        Query.bindValue(1,UID2);
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        QString UID1=input->ExchangeData->at(1);
+        QString UID2=input->ExchangeData->at(2);
+        if(!insertSecurityCheck(UID1))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        if(!insertSecurityCheck(UID2))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
+        Query.prepare("DELETE FROM [dbo].[LectureMap]WHERE ZZULectureUUID=:UID1 and UDELectureUUID=:UID2");
+        Query.bindValue(0,UID1);
+        Query.bindValue(1,UID2);
+    }
+    return false;
+}
+
+bool deletelecturemap::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void deletelecturemap::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool deletelecturemap::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool listmajor::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="listmajor")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        Query.prepare("SELECT [MajorUUID] ,[MajorName] ,[Supervisor] FROM [dbo].[MajorinUDE]");
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        Query.prepare("SELECT [MajorUUID],[MajorName],[Supervisor],[MajorinUDE] FROM [dbo].[MajorinZZU]");
+    }
+    return false;
+}
+
+bool listmajor::outputdata(shared_ptr<queryexchange> output)
+{
+    if(Uni.isEmpty())
+        {
+            return false;
+        }
+        else
+        {
+            if(Uni=="ZZU")
+            {
+                output->Type="ZZUMajor";
+                while(Query.next())
+                {
+                    QString result=Query.value(0).toString().simplified()+",";
+                    result+=Query.value(1).toString().simplified()+",";
+                    result+=Query.value(2).toString().simplified()+",";
+                    result+=Query.value(3).toString().simplified();
+                    output->ExchangeData->append(result);
+                }
+            }
+            if(Uni=="UDE")
+            {
+                output->Type="UDEMajor";
+                while(Query.next())
+                {
+                    QString result=Query.value(0).toString().simplified()+",";
+                    result+=Query.value(1).toString().simplified()+",";
+                    result+=Query.value(2).toString().simplified();
+                    output->ExchangeData->append(result);
+                }
+            }
+            return false;
+    }
+}
+
+void listmajor::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool listmajor::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool listmajoruid::inputdata(shared_ptr<queryexchange> input)
+{
+    if (input->Type!="listmajoruid")
+        {
+            return false;
+        }
+        if(input->ExchangeData->at(0)=="UDE")
+        {
+            Uni="UDE";
+            Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinUDE]");
+        }
+        if(input->ExchangeData->at(0)=="ZZU")
+        {
+            Uni="ZZU";
+            Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinZZU]");
+        }
+        return false;
+}
+
+bool listmajoruid::outputdata(shared_ptr<queryexchange> output)
+{
+    if(Uni.isEmpty())
+        {
+            return false;
+        }
+        if(Uni=="ZZU")
+        {
+            output->Type="ZZUMajor";
+            while(Query.next())
+            {
+                QString result=Query.value(0).toString().simplified()+",";
+                result+=Query.value(1).toString().simplified();
+                output->ExchangeData->append(result);
+            }
+        }
+        if(Uni=="UDE")
+        {
+            output->Type="UDEMajor";
+            while(Query.next())
+            {
+                QString result=Query.value(0).toString().simplified()+",";
+                result+=Query.value(1).toString().simplified();
+                output->ExchangeData->append(result);
+            }
+        }
+        return false;
+}
+
+void listmajoruid::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool listmajoruid::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
