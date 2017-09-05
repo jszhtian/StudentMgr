@@ -34,7 +34,10 @@ SOURCES += \
     thdconnect.cpp \
     thdsqlexec.cpp \
     sqlfactory.cpp \
-    myprodlg.cpp
+    myprodlg.cpp \
+    majoreditor.cpp \
+    lecturemapdialog.cpp \
+    lectureselectdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,12 +51,18 @@ HEADERS += \
     thdsqlexec.h \
     sqlfactory.h \
     sqlcommandbase.h \
-    myprodlg.h
+    myprodlg.h \
+    majoreditor.h \
+    lecturemapdialog.h \
+    lectureselectdialog.h
 
 FORMS += \
         mainwindow.ui \
     connectdialog.ui \
-    lectureeditor.ui
+    lectureeditor.ui \
+    majoreditor.ui \
+    lecturemapdialog.ui \
+    lectureselectdialog.ui
 
 #win32:CONFIG += console
 #for debug output!

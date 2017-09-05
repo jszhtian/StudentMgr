@@ -10,6 +10,7 @@
 #include <QSortFilterProxyModel>
 #include <QFile>
 #include <QFileDialog>
+#include "lecturemapdialog.h"
 
 namespace Ui {
 class LectureEditor;
@@ -40,15 +41,17 @@ private slots:
 
     void on_ExportButton_clicked();
 
+    void on_EditMap_clicked();
+
 private:
     void fillthemodel(QStringList* list);
-    void updateLectureUIDmap();
+    //void updateLectureUIDmap();
     void GetList();
     Ui::LectureEditor *ui;
     shared_ptr<SQLBase> db;
     QStandardItemModel* TableModel=NULL;
-    std::map<string,string> UDElectMap;
-    std::map<string,string> ZZUlectMap;
+    //std::map<string,string> UDElectMap;
+    //std::map<string,string> ZZUlectMap;
 };
 
 #endif // LECTUREEDITOR_H

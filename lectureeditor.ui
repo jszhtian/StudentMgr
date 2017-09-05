@@ -43,7 +43,21 @@
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="4" column="1">
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Credit</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Module</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
             <widget class="QComboBox" name="Typebox">
              <item>
               <property name="text">
@@ -67,22 +81,17 @@
              </item>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Module</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
+           <item row="0" column="2">
             <widget class="QLineEdit" name="NameEditor"/>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Credit</string>
-             </property>
-            </widget>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="ModuleEditor"/>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLineEdit" name="Teachinghours"/>
+           </item>
+           <item row="5" column="2">
+            <widget class="QLineEdit" name="SemesterEditor"/>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="label_6">
@@ -98,18 +107,6 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
-            <widget class="QLineEdit" name="Teachinghours"/>
-           </item>
-           <item row="5" column="1">
-            <widget class="QLineEdit" name="SemesterEditor"/>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="ModuleEditor"/>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="Credit"/>
-           </item>
            <item row="5" column="0">
             <widget class="QLabel" name="label_7">
              <property name="text">
@@ -124,6 +121,9 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="Credit"/>
+           </item>
            <item row="6" column="0">
             <widget class="QLabel" name="label_11">
              <property name="text">
@@ -131,8 +131,12 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
-            <widget class="QLineEdit" name="MapEditor"/>
+           <item row="6" column="2">
+            <widget class="QPushButton" name="EditMap">
+             <property name="text">
+              <string>Map Edit</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

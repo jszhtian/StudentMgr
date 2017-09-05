@@ -57,71 +57,79 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionConnect_triggered()
 {
-    ConnectDialog *login=new ConnectDialog;
-    if(login->Rejected==login->exec())
+    if(sqldb!=NULL)
     {
-        QMessageBox::critical(NULL,tr("Connecting Error"),tr("Please input Server infomation!"));
+        QMessageBox::information(NULL,"Info","Database is connected!");
     }
     else
     {
-        //use shared_ptr instead of raw pointer. The Smart pointer will auto release if references counter equal to 0
-        //Use Auto. Auto will Identify the return value
-        //Normal Qt Object don't need smart ptr because the Qt itself will handle this
-        auto SerInfo=shared_ptr<LoginInfo>(new LoginInfo);
-        auto res=login->GetLoginInfo(SerInfo);
-        if(!res)
+        ConnectDialog *login=new ConnectDialog;
+        if(login->Rejected==login->exec())
         {
-            QMessageBox::critical(NULL,"Error","Get Login information failed!");
+            QMessageBox::critical(NULL,tr("Connecting Error"),tr("Please input Server infomation!"));
         }
         else
         {
-            sqldb=shared_ptr<SQLServer>(new SQLServer(SerInfo->qStr_Address,SerInfo->qStr_Username,SerInfo->qStr_Password));
-            //auto dbres=sqldb->connect();
-            //set profressdialog
-            MyProdlg prodlg(this);
-            /*
-             *  QProgressDialog progressDlg(this);
-            progressDlg.setWindowModality(Qt::WindowModal);
-            progressDlg.setMinimum(0);
-            progressDlg.setMaximum(0);
-            progressDlg.setLabelText("Connecting...");
-            progressDlg.setCancelButton(0);
-            progressDlg.setWindowFlags(progressDlg.windowFlags()&~Qt::WindowCloseButtonHint);
-            */
-
-            prodlg.show();
-            //change to multi thread method
-            auto m_thread=new thdconnect();
-            //connect thread signal->mainwindow slot
-            connect(m_thread,&thdconnect::result,this,&MainWindow::recvconnectsignal);
-            m_thread->setdb(sqldb);
-            m_thread->start();
-            //m_thread->wait();
-            while(!m_thread->isFinished())
+            //use shared_ptr instead of raw pointer. The Smart pointer will auto release if references counter equal to 0
+            //Use Auto. Auto will Identify the return value
+            //Normal Qt Object don't need smart ptr because the Qt itself will handle this
+            auto SerInfo=shared_ptr<LoginInfo>(new LoginInfo);
+            auto res=login->GetLoginInfo(SerInfo);
+            if(!res)
             {
-                qApp->processEvents();
-            }
-            prodlg.close();
-
-            //disconnect signal/slot connect
-            disconnect(m_thread,&thdconnect::result,this,&MainWindow::recvconnectsignal);
-            /*
-            if (!connectstatus)
-            {
-                QMessageBox::critical(NULL,"Error","Connection Failed!");
-                delete sqldb;
-                sqldb=NULL;
+                QMessageBox::critical(NULL,"Error","Get Login information failed!");
             }
             else
             {
-                QMessageBox::information(NULL,"Connection","Connection established!");
-                ui->menuEditor->setEnabled(true);
-            }
-            */
+                sqldb=shared_ptr<SQLServer>(new SQLServer(SerInfo->qStr_Address,SerInfo->qStr_Username,SerInfo->qStr_Password));
+                //auto dbres=sqldb->connect();
+                //set profressdialog
+                MyProdlg prodlg(this);
+                /*
+                 *  QProgressDialog progressDlg(this);
+                progressDlg.setWindowModality(Qt::WindowModal);
+                progressDlg.setMinimum(0);
+                progressDlg.setMaximum(0);
+                progressDlg.setLabelText("Connecting...");
+                progressDlg.setCancelButton(0);
+                progressDlg.setWindowFlags(progressDlg.windowFlags()&~Qt::WindowCloseButtonHint);
+                */
 
+                prodlg.show();
+                //change to multi thread method
+                auto m_thread=new thdconnect();
+                //connect thread signal->mainwindow slot
+                connect(m_thread,&thdconnect::result,this,&MainWindow::recvconnectsignal);
+                m_thread->setdb(sqldb);
+                m_thread->start();
+                //m_thread->wait();
+                while(!m_thread->isFinished())
+                {
+                    qApp->processEvents();
+                }
+                prodlg.close();
+
+                //disconnect signal/slot connect
+                disconnect(m_thread,&thdconnect::result,this,&MainWindow::recvconnectsignal);
+                /*
+                if (!connectstatus)
+                {
+                    QMessageBox::critical(NULL,"Error","Connection Failed!");
+                    delete sqldb;
+                    sqldb=NULL;
+                }
+                else
+                {
+                    QMessageBox::information(NULL,"Connection","Connection established!");
+                    ui->menuEditor->setEnabled(true);
+                }
+                */
+
+            }
         }
+        delete login;
     }
-    delete login;
+
 }
 
 void MainWindow::on_actionDisconnect_triggered()
@@ -137,6 +145,7 @@ void MainWindow::on_actionDisconnect_triggered()
             sqldb->disconnect();
             QMessageBox::information(NULL,"Info","ODBC connection disconnected.");
             ui->menuEditor->setEnabled(false);
+            sqldb.reset();
         }
         catch(exception& e)
         {

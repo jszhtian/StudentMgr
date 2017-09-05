@@ -93,83 +93,7 @@ void LectureEditor::fillthemodel(QStringList *list)
     ui->LectureView->resizeColumnsToContents();
 }
 
-void LectureEditor::updateLectureUIDmap()
-{
-    ZZUlectMap.clear();
-    UDElectMap.clear();
-    SQLFactory factory;
-    //For ZZU
-    auto listUIDZZU=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlectureuid"));
-    auto inputZZU=shared_ptr<queryexchange>(new queryexchange);
-    auto inputlistZZU=new QStringList;
-    inputZZU->Type="listlectureuid";
-    inputlistZZU->append("ZZU");
-    inputZZU->ExchangeData=inputlistZZU;
-    listUIDZZU->inputdata(inputZZU);
-    listUIDZZU->setdb(db->getdb());
-    auto res=listUIDZZU->exec();
-    if (res)
-    {
-        auto outputZZU=shared_ptr<queryexchange>(new queryexchange);
-        auto outputlistZZU=new QStringList;
-        outputZZU->ExchangeData=outputlistZZU;
-        listUIDZZU->outputdata(outputZZU);
-        for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
-        {
-            QString tmp=outputZZU->ExchangeData->at(itr);
-            istringstream sin(tmp.toStdString());
-            QStringList attrs;
-            QString UID;
-            QString LectName;
-            string attr;
-            while(getline(sin,attr,','))
-            {
-                attrs.append(QString::fromStdString(attr));
-            }
-            UID=attrs.at(0);
-            LectName=attrs.at(1);
-            ZZUlectMap.insert(pair<string,string>(UID.toStdString(),LectName.toStdString()));
-        }
-    }
-    //For UDE
-    auto listUIDUDE=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlectureuid"));
-    auto inputUDE=shared_ptr<queryexchange>(new queryexchange);
-    auto inputlistUDE=new QStringList;
-    inputUDE->Type="listlectureuid";
-    inputlistUDE->append("UDE");
-    inputUDE->ExchangeData=inputlistUDE;
-    listUIDUDE->inputdata(inputUDE);
-    listUIDUDE->setdb(db->getdb());
-    auto res2=listUIDUDE->exec();
-    if (res2)
-    {
-        auto outputUDE=shared_ptr<queryexchange>(new queryexchange);
-        auto outputlistUDE=new QStringList;
-        outputUDE->ExchangeData=outputlistUDE;
-        listUIDUDE->outputdata(outputUDE);
-        for(int itr=0;itr<outputUDE->ExchangeData->size();++itr)
-        {
-            QString tmp=outputUDE->ExchangeData->at(itr);
-            istringstream sin(tmp.toStdString());
-            QStringList attrs;
-            QString UID;
-            QString LectName;
-            string attr;
-            while(getline(sin,attr,','))
-            {
-                attrs.append(QString::fromStdString(attr));
-            }
-            if(attrs.size()!=2)
-            {
-                wcout<<"updateLectureUIDmap:Not match number of parameters!";
-                qDebug()<<"updateLectureUIDmap:Not match number of parameters!";
-            }
-            UID=attrs.at(0);
-            LectName=attrs.at(1);
-            UDElectMap.insert(pair<string,string>(UID.toStdString(),LectName.toStdString()));
-        }
-    }
-}
+
 
 void LectureEditor::GetList()
 {
@@ -275,36 +199,7 @@ void LectureEditor::on_LectureView_clicked(const QModelIndex &index)
        ui->Credit->setText(TableModel->item(index.row(),4)->text());
        ui->SemesterEditor->setText(TableModel->item(index.row(),2)->text());
 
-       SQLFactory factory;
-       auto listlecturemap=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlecturemap"));
-       auto input=shared_ptr<queryexchange>(new queryexchange);
-       auto inputlist=new QStringList;
-       input->Type="ListLectureMap";
-       inputlist->append("UDE");
-       inputlist->append(TableModel->item(index.row(),0)->text());
-       input->ExchangeData=inputlist;
-       listlecturemap->inputdata(input);
-       listlecturemap->setdb(db->getdb());
-       auto res=listlecturemap->exec();
-       if (res)
-       {
-           auto output=shared_ptr<queryexchange>(new queryexchange);
-           auto outputlist=new QStringList;
-           output->ExchangeData=outputlist;
-           listlecturemap->outputdata(output);
-           int capsize=output->ExchangeData->size();
-           QString Str;
-           for(int i=0;i<capsize;i++)
-           {
-               Str+=output->ExchangeData->at(i);
-               Str+=";";
-           }
-           ui->MapEditor->setText(Str);
-       }
-       else
-       {
-           QMessageBox::critical(NULL,"Error","SQL command execute failed!");
-       }
+
     }
     if(UniSel=="University ZhengZhou")
     {
@@ -324,36 +219,7 @@ void LectureEditor::on_LectureView_clicked(const QModelIndex &index)
             std::wcout<<"Unexpected Type!"<<endl;
             QMessageBox::critical(NULL,"Error","Unexpected Type!");
         }
-        SQLFactory factory;
-        auto listlecturemap=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlecturemap"));
-        auto input=shared_ptr<queryexchange>(new queryexchange);
-        auto inputlist=new QStringList;
-        input->Type="ListLectureMap";
-        inputlist->append("ZZU");
-        inputlist->append(TableModel->item(index.row(),0)->text());
-        input->ExchangeData=inputlist;
-        listlecturemap->inputdata(input);
-        listlecturemap->setdb(db->getdb());
-        auto res=listlecturemap->exec();
-        if (res)
-        {
-            auto output=shared_ptr<queryexchange>(new queryexchange);
-            auto outputlist=new QStringList;
-            output->ExchangeData=outputlist;
-            listlecturemap->outputdata(output);
-            int capsize=output->ExchangeData->size();
-            QString Str;
-            for(int i=0;i<capsize;i++)
-            {
-                Str+=output->ExchangeData->at(i);
-                Str+=";";
-            }
-            ui->MapEditor->setText(Str);
-        }
-        else
-        {
-            QMessageBox::critical(NULL,"Error","SQL command execute failed!");
-        }
+
     }
 }
 
@@ -552,4 +418,38 @@ void LectureEditor::on_ExportButton_clicked()
         QMessageBox::information(NULL, "Export", "Nothing Exported!");
     }
     delete fileDialog;
+}
+
+void LectureEditor::on_EditMap_clicked()
+{
+    int currow=-1;
+    try
+    {
+        currow=ui->LectureView->currentIndex().row();
+    }catch(exception &e)
+    {
+        wcout<<e.what()<<endl;
+        qDebug()<<QString::fromStdString(e.what());
+    }
+    if(currow==-1)
+    {
+        QMessageBox::critical(NULL,"Error","No data in tableview!");
+        wcout<<"No data in tableview!"<<endl;
+        qDebug()<<"No data in tableview!";
+    }
+    else
+    {
+        QString UID=TableModel->item(currow,0)->text();
+        auto Sel=ui->UniSelect->currentText();
+        QString uni;
+        if(Sel=="University Duisburg-Essen")uni="UDE";
+        if(Sel=="University ZhengZhou")uni="ZZU";
+        LectureMapDialog* dlg=new LectureMapDialog(this);
+        dlg->initDB(db);
+        dlg->setUni(uni);
+        dlg->setLectUID(UID);
+        dlg->exec();
+        delete dlg;
+    }
+
 }
