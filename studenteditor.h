@@ -35,6 +35,8 @@ private slots:
 
     void on_deleteButton_clicked();
 
+    void on_ExportButton_clicked();
+
 private:
     void InitViewModel();
     void getMajorMap();

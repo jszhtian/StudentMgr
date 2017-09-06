@@ -310,3 +310,40 @@ void StudentEditor::on_deleteButton_clicked()
         }
     }
 }
+
+void StudentEditor::on_ExportButton_clicked()
+{
+    QFileDialog* fileDialog=new QFileDialog(this);
+    fileDialog->setWindowTitle("Export CSV File");
+    fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog->setNameFilter("CSV File(*.csv)");
+    fileDialog->setDirectory(".");
+    if(fileDialog->exec() == QDialog::Accepted)
+    {
+        QString path=fileDialog->selectedFiles()[0];
+        QFile csvfile(path);
+        if(!csvfile.open(QIODevice::WriteOnly|QIODevice::Text))
+        {
+            QMessageBox::information(NULL, "IO Error", "Access denied!");
+        }
+        QTextStream out(&csvfile);
+        out.setCodec("UTF-8");
+        out<<"StudentID,Name,Birthday,IDNumber,Class,Gender,Grade,StudO,MajorinZZU,MajorinUDE\n";
+
+        for(int i=0;i<TableModel->rowCount();++i)
+        {
+            for(int j=1;j<TableModel->columnCount();j++)
+            {
+                out<<TableModel->item(i,j)->text()<<",";
+            }
+            out<<"\n";
+        }
+        csvfile.close();
+        QMessageBox::information(NULL, "Export", "Export finish!");
+    }
+    else
+    {
+        QMessageBox::information(NULL, "Export", "Nothing Exported!");
+    }
+    delete fileDialog;
+}
