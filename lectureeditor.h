@@ -24,7 +24,7 @@ public:
     explicit LectureEditor(QWidget *parent = 0);
     ~LectureEditor();
     void initDB(shared_ptr<SQLBase> setdb);
-    void InitViewModel();
+
 
 
 private slots:
@@ -44,6 +44,7 @@ private slots:
     void on_EditMap_clicked();
 
 private:
+    void InitViewModel();
     void fillthemodel(QStringList* list);
     //void updateLectureUIDmap();
     void GetList();

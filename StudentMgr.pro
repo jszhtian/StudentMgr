@@ -37,7 +37,8 @@ SOURCES += \
     myprodlg.cpp \
     majoreditor.cpp \
     lecturemapdialog.cpp \
-    lectureselectdialog.cpp
+    lectureselectdialog.cpp \
+    studenteditor.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,7 +55,8 @@ HEADERS += \
     myprodlg.h \
     majoreditor.h \
     lecturemapdialog.h \
-    lectureselectdialog.h
+    lectureselectdialog.h \
+    studenteditor.h
 
 FORMS += \
         mainwindow.ui \
@@ -62,7 +64,8 @@ FORMS += \
     lectureeditor.ui \
     majoreditor.ui \
     lecturemapdialog.ui \
-    lectureselectdialog.ui
+    lectureselectdialog.ui \
+    studenteditor.ui
 
 #win32:CONFIG += console
 #for debug output!

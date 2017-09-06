@@ -10,7 +10,7 @@ CREATE TABLE [Student](
 	[Class] [nvarchar](50) NOT NULL,
 	[Gender] [nvarchar](50) NOT NULL Check([Gender]=N'male' or [Gender]=N'female'),
 	[Grade] [nvarchar](50) NOT NULL,
-	[StadO] [nvarchar](50) NOT NULL,
+	[StudO] [nvarchar](50) NOT NULL,
 	[MajorUUID] [uniqueidentifier] NOT NULL,
 	primary key([StudentUUID]),
 	foreign key([MajorUUID]) REFERENCES MajorinZZU(MajorUUID)

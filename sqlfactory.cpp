@@ -7,7 +7,7 @@ inline bool insertSecurityCheck(QString Str)
 
 bool listlecture::inputdata(shared_ptr<queryexchange> input)
 {
-    if(input->Type!="ListLecture")
+    if(input->Type.toLower()!="listlecture")
     {
         return false;
     }
@@ -130,6 +130,46 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
     {
         return new listmajoruid;
     }
+    if(COMname.toLower()=="insertmajor")
+    {
+        return new insertmajor;
+    }
+    if(COMname.toLower()=="deletemajor")
+    {
+        return new deletemajor;
+    }
+    if(COMname.toLower()=="updatemajor")
+    {
+        return new updatemajor;
+    }
+    if(COMname.toLower()=="listlectureselect")
+    {
+        return new listLectureSelect;
+    }
+    if(COMname.toLower()=="insertlectureselect")
+    {
+        return new insertlectureselect;
+    }
+    if(COMname.toLower()=="deletelectureselect")
+    {
+        return new deletelectureselect;
+    }
+    if(COMname.toLower()=="liststudent")
+    {
+        return new liststudent;
+    }
+    if(COMname.toLower()=="insertstudent")
+    {
+        return new insertstudent;
+    }
+    if(COMname.toLower()=="deletestudent")
+    {
+        return new deletestudent;
+    }
+    if(COMname.toLower()=="updatestudent")
+    {
+        return new updatestudent;
+    }
     return NULL;
 }
 
@@ -137,7 +177,7 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
 
 bool listlectureuid::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="listlectureuid")
+    if (input->Type.toLower()!="listlectureuid")
     {
         return false;
     }
@@ -211,7 +251,7 @@ bool listlectureuid::exec()
 
 bool insertlecture::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="insertlecture")
+    if (input->Type.toLower()!="insertlecture")
     {
         return false;
     }
@@ -351,7 +391,7 @@ bool insertlecture::exec()
 
 bool deletelecture::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="deletelecture")
+    if (input->Type.toLower()!="deletelecture")
     {
         return false;
     }
@@ -415,7 +455,7 @@ bool deletelecture::exec()
 
 bool updatelecture::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="updatelecture")
+    if (input->Type.toLower()!="updatelecture")
     {
         return false;
     }
@@ -572,7 +612,7 @@ bool updatelecture::exec()
 
 bool listLectureMap::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="ListLectureMap")
+    if (input->Type.toLower()!="listlecturemap")
     {
         return false;
     }
@@ -661,7 +701,7 @@ bool listLectureMap::exec()
 
 bool insertlecturemap::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="insertlecturemap")
+    if (input->Type.toLower()!="insertlecturemap")
     {
         return false;
     }
@@ -741,7 +781,7 @@ bool insertlecturemap::exec()
 
 bool deletelecturemap::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="deletelecturemap")
+    if (input->Type.toLower()!="deletelecturemap")
     {
         return false;
     }
@@ -821,7 +861,7 @@ bool deletelecturemap::exec()
 
 bool listmajor::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="listmajor")
+    if (input->Type.toLower()!="listmajor")
     {
         return false;
     }
@@ -843,37 +883,37 @@ bool listmajor::inputdata(shared_ptr<queryexchange> input)
 bool listmajor::outputdata(shared_ptr<queryexchange> output)
 {
     if(Uni.isEmpty())
+    {
+        return false;
+    }
+    else
+    {
+        if(Uni=="ZZU")
         {
-            return false;
+            output->Type="ZZUMajor";
+            while(Query.next())
+            {
+                QString result=Query.value(0).toString().simplified()+",";
+                result+=Query.value(1).toString().simplified()+",";
+                result+=Query.value(2).toString().simplified()+",";
+                result+=Query.value(3).toString().simplified();
+                output->ExchangeData->append(result);
+            }
+            return true;
         }
-        else
+        if(Uni=="UDE")
         {
-            if(Uni=="ZZU")
+            output->Type="UDEMajor";
+            while(Query.next())
             {
-                output->Type="ZZUMajor";
-                while(Query.next())
-                {
-                    QString result=Query.value(0).toString().simplified()+",";
-                    result+=Query.value(1).toString().simplified()+",";
-                    result+=Query.value(2).toString().simplified()+",";
-                    result+=Query.value(3).toString().simplified();
-                    output->ExchangeData->append(result);
-                }
-                return true;
+                QString result=Query.value(0).toString().simplified()+",";
+                result+=Query.value(1).toString().simplified()+",";
+                result+=Query.value(2).toString().simplified();
+                output->ExchangeData->append(result);
             }
-            if(Uni=="UDE")
-            {
-                output->Type="UDEMajor";
-                while(Query.next())
-                {
-                    QString result=Query.value(0).toString().simplified()+",";
-                    result+=Query.value(1).toString().simplified()+",";
-                    result+=Query.value(2).toString().simplified();
-                    output->ExchangeData->append(result);
-                }
-                return true;
-            }
-            return false;
+            return true;
+        }
+        return false;
     }
 }
 
@@ -901,54 +941,54 @@ bool listmajor::exec()
 
 bool listmajoruid::inputdata(shared_ptr<queryexchange> input)
 {
-    if (input->Type!="listmajoruid")
-        {
-            return false;
-        }
-        if(input->ExchangeData->at(0)=="UDE")
-        {
-            Uni="UDE";
-            Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinUDE]");
-            return true;
-        }
-        if(input->ExchangeData->at(0)=="ZZU")
-        {
-            Uni="ZZU";
-            Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinZZU]");
-            return true;
-        }
+    if (input->Type.toLower()!="listmajoruid")
+    {
         return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinUDE]");
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinZZU]");
+        return true;
+    }
+    return false;
 }
 
 bool listmajoruid::outputdata(shared_ptr<queryexchange> output)
 {
     if(Uni.isEmpty())
-        {
-            return false;
-        }
-        if(Uni=="ZZU")
-        {
-            output->Type="ZZUMajor";
-            while(Query.next())
-            {
-                QString result=Query.value(0).toString().simplified()+",";
-                result+=Query.value(1).toString().simplified();
-                output->ExchangeData->append(result);
-            }
-            return true;
-        }
-        if(Uni=="UDE")
-        {
-            output->Type="UDEMajor";
-            while(Query.next())
-            {
-                QString result=Query.value(0).toString().simplified()+",";
-                result+=Query.value(1).toString().simplified();
-                output->ExchangeData->append(result);
-            }
-            return true;
-        }
+    {
         return false;
+    }
+    if(Uni=="ZZU")
+    {
+        output->Type="ZZUMajor";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified()+",";
+            result+=Query.value(1).toString().simplified();
+            output->ExchangeData->append(result);
+        }
+        return true;
+    }
+    if(Uni=="UDE")
+    {
+        output->Type="UDEMajor";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified()+",";
+            result+=Query.value(1).toString().simplified();
+            output->ExchangeData->append(result);
+        }
+        return true;
+    }
+    return false;
 }
 
 void listmajoruid::setdb(QSqlDatabase setdb)
@@ -957,6 +997,639 @@ void listmajoruid::setdb(QSqlDatabase setdb)
 }
 
 bool listmajoruid::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool insertmajor::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="insertmajor")
+    {
+        return false;
+    }
+
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        if(input->ExchangeData->size()!=3)
+        {
+            qDebug()<<"Wrong Parameter";
+            wcout<<"Wrong Parameter"<<endl;
+            return false;
+        }
+        QString name=input->ExchangeData->at(1);
+        QString supervisor=input->ExchangeData->at(2);
+        Query.prepare("INSERT INTO [dbo].[MajorinUDE]([MajorName],[Supervisor])VALUES(:name,:supervisor)");
+        Query.bindValue(0,name);
+        Query.bindValue(1,supervisor);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        if(input->ExchangeData->size()!=4)
+        {
+            qDebug()<<"Wrong Parameter";
+            wcout<<"Wrong Parameter"<<endl;
+            return false;
+        }
+        QString name=input->ExchangeData->at(1);
+        QString supervisor=input->ExchangeData->at(2);
+        QString UID=input->ExchangeData->at(3);
+        Query.prepare("INSERT INTO [dbo].[MajorinZZU]([MajorName],[Supervisor],[MajorinUDE])VALUES(:name,:supervisor,:UID)");
+        Query.bindValue(0,name);
+        Query.bindValue(1,supervisor);
+        Query.bindValue(2,UID);
+        return true;
+    }
+    return false;
+}
+
+bool insertmajor::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void insertmajor::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool insertmajor::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool deletemajor::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="deletemajor")
+    {
+        return false;
+    }
+    if(input->ExchangeData->size()!=2)
+    {
+        qDebug()<<"Wrong Parameter";
+        wcout<<"Wrong Parameter"<<endl;
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        QString UID=input->ExchangeData->at(1);
+        Query.prepare("DELETE FROM [dbo].[MajorinUDE] WHERE MajorUUID=:UID");
+        Query.bindValue(0,UID);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        QString UID=input->ExchangeData->at(1);
+        Query.prepare("DELETE FROM [dbo].[MajorinZZU] WHERE MajorUUID=:UID");
+        Query.bindValue(0,UID);
+        return true;
+    }
+    return false;
+}
+
+bool deletemajor::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void deletemajor::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool deletemajor::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool updatemajor::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="updatemajor")
+    {
+        return false;
+    }
+
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        if(input->ExchangeData->size()!=4)
+        {
+            qDebug()<<"Wrong Parameter";
+            wcout<<"Wrong Parameter"<<endl;
+            return false;
+        }
+        QString UID=input->ExchangeData->at(1);
+        QString name=input->ExchangeData->at(2);
+        QString supervisor=input->ExchangeData->at(3);
+        Query.prepare("UPDATE [dbo].[MajorinUDE] SET [MajorName] = :name,[Supervisor] = :visor WHERE [MajorUUID]=:UID");
+        Query.bindValue(0,name);
+        Query.bindValue(1,supervisor);
+        Query.bindValue(2,UID);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        if(input->ExchangeData->size()!=5)
+        {
+            qDebug()<<"Wrong Parameter";
+            wcout<<"Wrong Parameter"<<endl;
+            return false;
+        }
+        QString UID=input->ExchangeData->at(1);
+        QString name=input->ExchangeData->at(2);
+        QString supervisor=input->ExchangeData->at(3);
+        QString UDEUID=input->ExchangeData->at(4);
+        Query.prepare("UPDATE [dbo].[MajorinZZU]  SET [MajorName] = :name,[Supervisor] = :visor,[MajorinUDE] = :UDEUID WHERE [MajorUUID] = :uid");
+        Query.bindValue(0,name);
+        Query.bindValue(1,supervisor);
+        Query.bindValue(2,UDEUID);
+        Query.bindValue(3,UID);
+        return true;
+    }
+    return false;
+}
+
+bool updatemajor::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void updatemajor::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool updatemajor::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool listLectureSelect::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="listlectureselect")
+    {
+        return false;
+    }
+    if(input->ExchangeData->size()!=2)
+    {
+        qDebug()<<"Wrong Parameter";
+        wcout<<"Wrong Parameter"<<endl;
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        QString UID=input->ExchangeData->at(1);
+        Query.prepare("SELECT [LectureName]  FROM [dbo].[UDELectureSelect],[dbo].[LectureinUDE]  where [UDELectureSelect].LectureUUID=[LectureinUDE].LectureUUID and [MajorUUID]=:UID");
+        Query.bindValue(0,UID);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        QString UID=input->ExchangeData->at(1);
+        Query.prepare("SELECT [LectureName]  FROM [dbo].[ZZULectureSelect],[dbo].[LectureinZZU]  where [ZZULectureSelect].LectureUUID=LectureinZZU.LectureUUID and MajorUUID=:UID");
+        Query.bindValue(0,UID);
+        return true;
+    }
+    return false;
+}
+
+bool listLectureSelect::outputdata(shared_ptr<queryexchange> output)
+{
+    if(Uni.isEmpty())
+    {
+        return false;
+    }
+    if(Uni=="ZZU")
+    {
+        output->Type="ZZULecture";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified();
+            output->ExchangeData->append(result);
+        }
+        return true;
+    }
+    if(Uni=="UDE")
+    {
+        output->Type="UDELecture";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified();
+            output->ExchangeData->append(result);
+        }
+        return true;
+    }
+    return false;
+}
+
+void listLectureSelect::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool listLectureSelect::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool insertlectureselect::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="insertlectureselect")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        QString Major=input->ExchangeData->at(1);
+        QString Lecture=input->ExchangeData->at(2);
+        Query.prepare("INSERT INTO [dbo].[UDELectureSelect] ([MajorUUID],[LectureUUID]) VALUES (:major,:lecture)");
+        Query.bindValue(0,Major);
+        Query.bindValue(1,Lecture);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        QString Major=input->ExchangeData->at(1);
+        QString Lecture=input->ExchangeData->at(2);
+        Query.prepare("INSERT INTO [dbo].[ZZULectureSelect] ([MajorUUID],[LectureUUID]) VALUES (:major,:lecture)");
+        Query.bindValue(0,Major);
+        Query.bindValue(1,Lecture);
+        return true;
+    }
+    return false;
+}
+
+bool insertlectureselect::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void insertlectureselect::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool insertlectureselect::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool deletelectureselect::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="deletelectureselect")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        QString Major=input->ExchangeData->at(1);
+        QString Lecture=input->ExchangeData->at(2);
+        Query.prepare("DELETE FROM [dbo].[UDELectureSelect] WHERE MajorUUID=:major and LectureUUID=:lecture");
+        Query.bindValue(0,Major);
+        Query.bindValue(1,Lecture);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        QString Major=input->ExchangeData->at(1);
+        QString Lecture=input->ExchangeData->at(2);
+        Query.prepare("DELETE FROM [dbo].[ZZULectureSelect] WHERE MajorUUID=:major and LectureUUID=:lecture");
+        Query.bindValue(0,Major);
+        Query.bindValue(1,Lecture);
+        return true;
+    }
+    return false;
+}
+
+bool deletelectureselect::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void deletelectureselect::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool deletelectureselect::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool liststudent::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="liststudent")
+    {
+        return false;
+    }
+    else
+    {
+        Query.prepare("SELECT [StudentUUID],[StudentID],[Name],[Birthday],[IDNumber],[Class],[Gender],[Grade],[StudO],MajorinZZU.MajorName,MajorinUDE.MajorName FROM [dbo].[Student],[dbo].[MajorinUDE],[dbo].MajorinZZU  WHERE Student.MajorUUID=MajorinZZU.MajorUUID and MajorinZZU.MajorinUDE=MajorinUDE.MajorUUID");
+        return true;
+    }
+}
+
+bool liststudent::outputdata(shared_ptr<queryexchange> output)
+{
+    while(Query.next())
+    {
+        QString result=Query.value(0).toString().simplified()+",";
+        result+=Query.value(1).toString().simplified()+",";
+        result+=Query.value(2).toString().simplified()+",";
+        result+=Query.value(3).toString().simplified()+",";
+        result+=Query.value(4).toString().simplified()+",";
+        result+=Query.value(5).toString().simplified()+",";
+        result+=Query.value(6).toString().simplified()+",";
+        result+=Query.value(7).toString().simplified()+",";
+        result+=Query.value(8).toString().simplified()+",";
+        result+=Query.value(9).toString().simplified()+",";
+        result+=Query.value(10).toString().simplified();
+        output->ExchangeData->append(result);
+    }
+    return true;
+}
+
+void liststudent::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool liststudent::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool insertstudent::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="insertstudent")
+    {
+        return false;
+    }
+    else
+    {
+        if(input->ExchangeData->size()!=9)
+        {
+            qDebug()<<"Wrong Parameter";
+            wcout<<"Wrong Parameter"<<endl;
+            return false;
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        QString StdID=input->ExchangeData->at(0);
+        QString name=input->ExchangeData->at(1);
+        QString birthday=input->ExchangeData->at(2);
+        QString IDnum=input->ExchangeData->at(3);
+        QString Class=input->ExchangeData->at(4);
+        QString Gender=input->ExchangeData->at(5);
+        QString grade=input->ExchangeData->at(6);
+        QString studo=input->ExchangeData->at(7);
+        QString MajorUUID=input->ExchangeData->at(8);
+        Query.prepare("INSERT INTO [dbo].[Student]([StudentID],[Name],[Birthday],[IDNumber],[Class],[Gender],[Grade],[StudO],[MajorUUID]) VALUES (:StdID,:name,:birth,:idnum,:class,:gender,:grader,:studO,:majorinZZU)");
+        Query.bindValue(0,StdID);
+        Query.bindValue(1,name);
+        Query.bindValue(2,birthday);
+        Query.bindValue(3,IDnum);
+        Query.bindValue(4,Class);
+        Query.bindValue(5,Gender);
+        Query.bindValue(6,grade);
+        Query.bindValue(7,studo);
+        Query.bindValue(8,MajorUUID);
+        return true;
+    }
+}
+
+bool insertstudent::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void insertstudent::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool insertstudent::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool deletestudent::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="deletestudent")
+    {
+        return false;
+    }
+    else
+    {
+        QString UID=input->ExchangeData->at(0);
+        Query.prepare("DELETE FROM [dbo].[Student] WHERE StudentUUID=:uid");
+        Query.bindValue(0,UID);
+        return true;
+    }
+}
+
+bool deletestudent::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void deletestudent::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool deletestudent::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool updatestudent::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="updatestudent")
+    {
+        return false;
+    }
+    else
+    {
+        if(input->ExchangeData->size()!=10)
+        {
+            qDebug()<<"Wrong Parameter";
+            wcout<<"Wrong Parameter"<<endl;
+            return false;
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        QString stdUUID=input->ExchangeData->at(0);
+        QString StdID=input->ExchangeData->at(1);
+        QString name=input->ExchangeData->at(2);
+        QString birthday=input->ExchangeData->at(3);
+        QString IDnum=input->ExchangeData->at(4);
+        QString Class=input->ExchangeData->at(5);
+        QString Gender=input->ExchangeData->at(6);
+        QString grade=input->ExchangeData->at(7);
+        QString studo=input->ExchangeData->at(8);
+        QString MajorUUID=input->ExchangeData->at(9);
+        Query.prepare("UPDATE [dbo].[Student] SET [StudentID] = :stdID ,[Name] = :name,[Birthday] = :birth,[IDNumber] = :idnum,[Class] = :class ,[Gender] = :gender ,[Grade] = :grade ,[StudO] = :studo ,[MajorUUID] = :major WHERE [StudentUUID] =:uid");
+        Query.bindValue(0,StdID);
+        Query.bindValue(1,name);
+        Query.bindValue(2,birthday);
+        Query.bindValue(3,IDnum);
+        Query.bindValue(4,Class);
+        Query.bindValue(5,Gender);
+        Query.bindValue(6,grade);
+        Query.bindValue(7,studo);
+        Query.bindValue(8,MajorUUID);
+        Query.bindValue(9,stdUUID);
+        return true;
+    }
+}
+
+bool updatestudent::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void updatestudent::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool updatestudent::exec()
 {
     MyProdlg dlg;
     //change to multi thread method

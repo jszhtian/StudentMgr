@@ -57,6 +57,8 @@ void thdSQLExec::run()
                 db->rollback();
                 qDebug()<<db->lastError().text();
                 std::wcout<<db->lastError().text().toStdWString()<<endl;
+                qDebug()<<query->lastError().text();
+                std::wcout<<query->lastError().text().toStdWString()<<endl;
                 execresult=false;
             }
             else
@@ -72,6 +74,8 @@ void thdSQLExec::run()
             {
                 qDebug()<<db->lastError().text();
                 std::wcout<<db->lastError().text().toStdWString()<<endl;
+                qDebug()<<query->lastError().text();
+                std::wcout<<query->lastError().text().toStdWString()<<endl;
                 execresult=false;
             }
             else

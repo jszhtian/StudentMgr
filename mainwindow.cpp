@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    setCentralWidget(NULL);
     delete ui;
     qDebug()<<"MainWindow destory";
     wcout<<"MainWindow destory"<<endl;
@@ -163,6 +164,13 @@ void MainWindow::on_actionLectureEditor_triggered()
 void MainWindow::on_actionMajorEditor_triggered()
 {
     MajorEditor* newwidget=new MajorEditor(this);
+    newwidget->initDB(sqldb);
+    setCentralWidget(newwidget);
+}
+
+void MainWindow::on_actionStudentEditor_triggered()
+{
+    StudentEditor* newwidget=new StudentEditor(this);
     newwidget->initDB(sqldb);
     setCentralWidget(newwidget);
 }
