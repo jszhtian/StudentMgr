@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    setCentralWidget(NULL);
     delete ui;
     qDebug()<<"MainWindow destory";
     wcout<<"MainWindow destory"<<endl;

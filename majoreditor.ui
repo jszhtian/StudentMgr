@@ -133,9 +133,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="LectireList">
+          <widget class="QListWidget" name="LectureList">
            <property name="selectionMode">
-            <enum>QAbstractItemView::MultiSelection</enum>
+            <enum>QAbstractItemView::SingleSelection</enum>
            </property>
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectRows</enum>
