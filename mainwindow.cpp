@@ -167,3 +167,10 @@ void MainWindow::on_actionMajorEditor_triggered()
     newwidget->initDB(sqldb);
     setCentralWidget(newwidget);
 }
+
+void MainWindow::on_actionStudentEditor_triggered()
+{
+    StudentEditor* newwidget=new StudentEditor(this);
+    newwidget->initDB(sqldb);
+    setCentralWidget(newwidget);
+}

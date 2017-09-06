@@ -11,6 +11,7 @@
 #include "lectureeditor.h"
 #include "thdconnect.h"
 #include "majoreditor.h"
+#include "studenteditor.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +34,8 @@ private slots:
     void on_actionLectureEditor_triggered();
 
     void on_actionMajorEditor_triggered();
+
+    void on_actionStudentEditor_triggered();
 
 private:
     Ui::MainWindow *ui;
