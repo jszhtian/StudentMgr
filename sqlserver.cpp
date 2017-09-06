@@ -48,16 +48,8 @@ bool SQLServer::connect()
 
 bool SQLServer::disconnect()
 {
-    try{
-        db.close();
-        return true;
-    }
-    catch(exception& e)
-    {
-        cout<<e.what()<<endl;
-        return false;
-    }
-
+    db.close();
+    return true;
 }
 
 inline QSqlDatabase SQLServer::getdb()

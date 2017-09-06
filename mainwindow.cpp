@@ -6,11 +6,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    qDebug()<<"MainWindow create";
+    wcout<<"MainWindow create"<<endl;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    qDebug()<<"MainWindow destory";
+    wcout<<"MainWindow destory"<<endl;
 }
 
 void MainWindow::recvconnectsignal(bool result)
@@ -140,20 +144,11 @@ void MainWindow::on_actionDisconnect_triggered()
     }
     else
     {
-        try
-        {
-            sqldb->disconnect();
-            QMessageBox::information(NULL,"Info","ODBC connection disconnected.");
-            ui->menuEditor->setEnabled(false);
-            sqldb.reset();
-        }
-        catch(exception& e)
-        {
-            string err=e.what();
-            QString info=QString::fromStdString(err);
-            QMessageBox::critical(NULL,"Error",info);
-            std::cout<<e.what()<<endl;
-        }
+        sqldb->disconnect();
+        QMessageBox::information(NULL,"Info","ODBC connection disconnected.");
+        ui->menuEditor->setEnabled(false);
+        setCentralWidget(NULL);
+        sqldb.reset();
     }
 
 }
@@ -161,6 +156,13 @@ void MainWindow::on_actionDisconnect_triggered()
 void MainWindow::on_actionLectureEditor_triggered()
 {
     LectureEditor* newwidget=new LectureEditor(this);
+    newwidget->initDB(sqldb);
+    setCentralWidget(newwidget);
+}
+
+void MainWindow::on_actionMajorEditor_triggered()
+{
+    MajorEditor* newwidget=new MajorEditor(this);
     newwidget->initDB(sqldb);
     setCentralWidget(newwidget);
 }

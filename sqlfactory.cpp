@@ -122,6 +122,14 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
     {
         return new listLectureMap;
     }
+    if(COMname.toLower()=="listmajor")
+    {
+        return new listmajor;
+    }
+    if(COMname.toLower()=="listmajoruid")
+    {
+        return new listmajoruid;
+    }
     return NULL;
 }
 
@@ -137,11 +145,13 @@ bool listlectureuid::inputdata(shared_ptr<queryexchange> input)
     {
         Uni="UDE";
         Query.prepare("select [LectureUUID],[LectureName] from [ZZU-DB].[dbo].[LectureinUDE]");
+        return true;
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
         Uni="ZZU";
         Query.prepare("select [LectureUUID],[LectureName] from [ZZU-DB].[dbo].[LectureinZZU]");
+        return true;
     }
     return false;
 }
@@ -161,6 +171,7 @@ bool listlectureuid::outputdata(shared_ptr<queryexchange> output)
             result+=Query.value(1).toString().simplified();
             output->ExchangeData->append(result);
         }
+        return true;
     }
     if(Uni=="UDE")
     {
@@ -171,6 +182,7 @@ bool listlectureuid::outputdata(shared_ptr<queryexchange> output)
             result+=Query.value(1).toString().simplified();
             output->ExchangeData->append(result);
         }
+        return true;
     }
     return false;
 }
@@ -252,6 +264,7 @@ bool insertlecture::inputdata(shared_ptr<queryexchange> input)
         Query.bindValue(2,Semester.toInt());
         Query.bindValue(3,EACTSCredit.toDouble());
         Query.bindValue(4,Teachinghours.toInt());
+        return true;
 
     }
     if(input->ExchangeData->at(0)=="ZZU")
@@ -303,6 +316,7 @@ bool insertlecture::inputdata(shared_ptr<queryexchange> input)
         Query.bindValue(2,Type);
         Query.bindValue(3,CreditinUDE.toDouble());
         Query.bindValue(4,Teachinghours.toInt());
+        return true;
 
     }
     return false;
@@ -353,6 +367,7 @@ bool deletelecture::inputdata(shared_ptr<queryexchange> input)
             return false;
         }
         Query.bindValue(0,tmp);
+        return true;
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
@@ -366,6 +381,7 @@ bool deletelecture::inputdata(shared_ptr<queryexchange> input)
             return false;
         }
         Query.bindValue(0,tmp);
+        return true;
     }
     return false;
 }
@@ -460,6 +476,7 @@ bool updatelecture::inputdata(shared_ptr<queryexchange> input)
         Query.bindValue(3,EACTSCredit.toDouble());
         Query.bindValue(4,Teachinghours.toInt());
         Query.bindValue(5,UID);
+        return true;
 
     }
     if(input->ExchangeData->at(0)=="ZZU")
@@ -519,6 +536,7 @@ bool updatelecture::inputdata(shared_ptr<queryexchange> input)
         Query.bindValue(3,CreditinUDE.toDouble());
         Query.bindValue(4,Teachinghours.toInt());
         Query.bindValue(5,UID);
+        return true;
 
     }
     return false;
@@ -570,6 +588,7 @@ bool listLectureMap::inputdata(shared_ptr<queryexchange> input)
         }
         Query.prepare("SELECT LectureinZZU.LectureName FROM [dbo].[LectureMap],[dbo].LectureinUDE,[dbo].LectureinZZU where ZZULectureUUID=LectureinZZU.LectureUUID and UDELectureUUID=LectureinUDE.LectureUUID and UDELectureUUID=:UID");
         Query.bindValue(0,UID);
+        return true;
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
@@ -583,6 +602,7 @@ bool listLectureMap::inputdata(shared_ptr<queryexchange> input)
         }
         Query.prepare("SELECT LectureinUDE.LectureName FROM [dbo].[LectureMap],[dbo].LectureinUDE,[dbo].LectureinZZU where ZZULectureUUID=LectureinZZU.LectureUUID and UDELectureUUID=LectureinUDE.LectureUUID and ZZULectureUUID=:UID");
         Query.bindValue(0,UID);
+        return true;
     }
     return false;
 
@@ -602,6 +622,7 @@ bool listLectureMap::outputdata(shared_ptr<queryexchange> output)
             QString result=Query.value(0).toString().simplified();
             output->ExchangeData->append(result);
         }
+        return true;
     }
     if(Uni=="UDE")
     {
@@ -611,6 +632,7 @@ bool listLectureMap::outputdata(shared_ptr<queryexchange> output)
             QString result=Query.value(0).toString().simplified();
             output->ExchangeData->append(result);
         }
+        return true;
     }
     return false;
 }
@@ -663,6 +685,7 @@ bool insertlecturemap::inputdata(shared_ptr<queryexchange> input)
         Query.prepare("INSERT INTO [dbo].[LectureMap]([ZZULectureUUID],[UDELectureUUID])VALUES(:UID1,:UID2)");
         Query.bindValue(0,UID2);
         Query.bindValue(1,UID1);
+        return true;
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
@@ -684,6 +707,7 @@ bool insertlecturemap::inputdata(shared_ptr<queryexchange> input)
         Query.prepare("INSERT INTO [dbo].[LectureMap]([ZZULectureUUID],[UDELectureUUID])VALUES(:UID1,:UID2)");
         Query.bindValue(0,UID1);
         Query.bindValue(1,UID2);
+        return true;
     }
     return false;
 }
@@ -741,6 +765,7 @@ bool deletelecturemap::inputdata(shared_ptr<queryexchange> input)
         Query.prepare("DELETE FROM [dbo].[LectureMap]WHERE UDELectureUUID=:UID1 and ZZULectureUUID=:UID2");
         Query.bindValue(0,UID1);
         Query.bindValue(1,UID2);
+        return true;
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
@@ -762,6 +787,7 @@ bool deletelecturemap::inputdata(shared_ptr<queryexchange> input)
         Query.prepare("DELETE FROM [dbo].[LectureMap]WHERE ZZULectureUUID=:UID1 and UDELectureUUID=:UID2");
         Query.bindValue(0,UID1);
         Query.bindValue(1,UID2);
+        return true;
     }
     return false;
 }
@@ -803,11 +829,13 @@ bool listmajor::inputdata(shared_ptr<queryexchange> input)
     {
         Uni="UDE";
         Query.prepare("SELECT [MajorUUID] ,[MajorName] ,[Supervisor] FROM [dbo].[MajorinUDE]");
+        return true;
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
         Uni="ZZU";
         Query.prepare("SELECT [MajorUUID],[MajorName],[Supervisor],[MajorinUDE] FROM [dbo].[MajorinZZU]");
+        return true;
     }
     return false;
 }
@@ -831,6 +859,7 @@ bool listmajor::outputdata(shared_ptr<queryexchange> output)
                     result+=Query.value(3).toString().simplified();
                     output->ExchangeData->append(result);
                 }
+                return true;
             }
             if(Uni=="UDE")
             {
@@ -842,6 +871,7 @@ bool listmajor::outputdata(shared_ptr<queryexchange> output)
                     result+=Query.value(2).toString().simplified();
                     output->ExchangeData->append(result);
                 }
+                return true;
             }
             return false;
     }
@@ -879,11 +909,13 @@ bool listmajoruid::inputdata(shared_ptr<queryexchange> input)
         {
             Uni="UDE";
             Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinUDE]");
+            return true;
         }
         if(input->ExchangeData->at(0)=="ZZU")
         {
             Uni="ZZU";
             Query.prepare("select [MajorUUID],[MajorName] from [ZZU-DB].[dbo].[MajorinZZU]");
+            return true;
         }
         return false;
 }
@@ -903,6 +935,7 @@ bool listmajoruid::outputdata(shared_ptr<queryexchange> output)
                 result+=Query.value(1).toString().simplified();
                 output->ExchangeData->append(result);
             }
+            return true;
         }
         if(Uni=="UDE")
         {
@@ -913,6 +946,7 @@ bool listmajoruid::outputdata(shared_ptr<queryexchange> output)
                 result+=Query.value(1).toString().simplified();
                 output->ExchangeData->append(result);
             }
+            return true;
         }
         return false;
 }

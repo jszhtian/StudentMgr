@@ -10,4 +10,6 @@ MyProdlg::MyProdlg(QWidget *parent):QProgressDialog(parent)
     this->setCancelButton(0);
     this->setWindowFlags(this->windowFlags()&~Qt::WindowCloseButtonHint);
     this->show();
+    qDebug()<<"MyProdlg create";
+    wcout<<"MyProdlg create"<<endl;
 }

@@ -6,11 +6,15 @@ lectureselectDialog::lectureselectDialog(QWidget *parent) :
     ui(new Ui::lectureselectDialog)
 {
     ui->setupUi(this);
+    qDebug()<<"lectureselectDialog create";
+    wcout<<"lectureselectDialog create"<<endl;
 }
 
 lectureselectDialog::~lectureselectDialog()
 {
     delete ui;
+    qDebug()<<"lectureselectDialog destory";
+    wcout<<"lectureselectDialog destory"<<endl;
 }
 
 void lectureselectDialog::SetUni(QString SetName)

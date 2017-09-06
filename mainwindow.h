@@ -10,6 +10,7 @@
 #include "sqlserver.h"
 #include "lectureeditor.h"
 #include "thdconnect.h"
+#include "majoreditor.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,8 @@ private slots:
     void on_actionConnect_triggered();
     void on_actionDisconnect_triggered();
     void on_actionLectureEditor_triggered();
+
+    void on_actionMajorEditor_triggered();
 
 private:
     Ui::MainWindow *ui;

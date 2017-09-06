@@ -66,6 +66,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>Refresh</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -107,10 +114,24 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QTableView" name="MajorView"/>
+        <widget class="QTableView" name="MajorView">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Selected Lecture:</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QListWidget" name="LectireList">
            <property name="selectionMode">
@@ -131,7 +152,7 @@
          <item>
           <widget class="QPushButton" name="DeleteLecture">
            <property name="text">
-            <string>PushButton</string>
+            <string>Delete</string>
            </property>
           </widget>
          </item>

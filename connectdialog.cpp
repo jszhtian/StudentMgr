@@ -6,16 +6,19 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
     ui(new Ui::ConnectDialog)
 {
     ui->setupUi(this);
+    qDebug()<<"ConnectDialog create";
+    wcout<<"ConnectDialog create"<<endl;
 }
 
 ConnectDialog::~ConnectDialog()
 {
     delete ui;
+    qDebug()<<"ConnectDialog destory";
+    wcout<<"ConnectDialog destory"<<endl;
 }
 
 bool ConnectDialog::GetLoginInfo(shared_ptr<LoginInfo> info)
 {
-    try{
         QString Address=ui->AddressEditor->text();
         QString Username=ui->UserNameEditor->text();
         QString Password=ui->PasswordEditor->text();
@@ -23,12 +26,4 @@ bool ConnectDialog::GetLoginInfo(shared_ptr<LoginInfo> info)
         info->qStr_Password=Password;
         info->qStr_Username=Username;
         return true;
-    }
-    catch(exception& e)
-    {
-        string err=e.what();
-        QString info=QString::fromStdString(err);
-        QMessageBox::critical(NULL,"Error",info);
-        return false;
-    }
 }

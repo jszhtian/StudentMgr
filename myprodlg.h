@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QProgressDialog>
+#include "common.h"
 //Repackage of class QProgressDialog to simplified call function
 class MyProdlg:public QProgressDialog
 {

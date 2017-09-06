@@ -43,6 +43,8 @@ bool thdSQLExec::getresult()
 
 void thdSQLExec::run()
 {
+    qDebug()<<"thdSQLExec thread run";
+    wcout<<"thdSQLExec thread run"<<endl;
     isReset=false;
     if(query!=NULL&&db!=NULL)
     {

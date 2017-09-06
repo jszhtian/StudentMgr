@@ -24,12 +24,16 @@ LectureEditor::LectureEditor(QWidget *parent) :
         ui->SemesterEditor->setEnabled(true);
     }
     connect(ui->LectureView->horizontalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(slot_sortbyColumn(int)));
+    qDebug()<<"LectureEditor create";
+    wcout<<"LectureEditor create"<<endl;
 }
 
 LectureEditor::~LectureEditor()
 {
     delete ui;
     delete TableModel;
+    qDebug()<<"LectureEditor destory";
+    wcout<<"LectureEditor destory"<<endl;
 }
 
 void LectureEditor::initDB(shared_ptr<SQLBase> setdb)
@@ -230,150 +234,181 @@ void LectureEditor::slot_sortbyColumn(int column)
 
 void LectureEditor::on_InsertButton_clicked()
 {
-    auto UniSel=ui->UniSelect->currentText();
-    SQLFactory factory;
-    auto insert=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("insertlecture"));
-    auto input=shared_ptr<queryexchange>(new queryexchange);
-    auto inputlist=new QStringList;
-    if(UniSel=="University Duisburg-Essen")
+    if(ui->NameEditor->text().isEmpty())
     {
-        input->Type="insertlecture";
-        QString LectureName=ui->NameEditor->text();
-        QString Semester=ui->SemesterEditor->text();
-        QString Module=ui->ModuleEditor->text();
-        QString EACTSCredit=ui->Credit->text();
-        QString Teachinghours=ui->Teachinghours->text();
-        inputlist->append("UDE");
-        inputlist->append(LectureName);
-        inputlist->append(Semester);
-        inputlist->append(Module);
-        inputlist->append(EACTSCredit);
-        inputlist->append(Teachinghours);
-        input->ExchangeData=inputlist;
-    }
-    if(UniSel=="University ZhengZhou")
-    {
-        input->Type="insertlecture";
-        QString LectureName=ui->NameEditor->text();
-        QString Type=ui->Typebox->currentText();
-        QString Module=ui->ModuleEditor->text();
-        QString CreditinUDE=ui->Credit->text();
-        QString Teachinghours=ui->Teachinghours->text();
-        inputlist->append("ZZU");
-        inputlist->append(LectureName);
-        inputlist->append(Type);
-        inputlist->append(Module);
-        inputlist->append(CreditinUDE);
-        inputlist->append(Teachinghours);
-        input->ExchangeData=inputlist;
-    }
-    insert->inputdata(input);
-    insert->setdb(db->getdb());
-    auto res=insert->exec();
-    if(res)
-    {
-        QMessageBox::information(NULL,"Info","Insert finished.");
+        QMessageBox::critical(NULL,"Error","No Lecture Name input!");
+        qDebug()<<"No Lecture Name input!";
+        wcout<<"No Lecture Name input!"<<endl;
     }
     else
     {
-        QMessageBox::critical(NULL,"Error","Error happens during insert operation!");
+        auto UniSel=ui->UniSelect->currentText();
+        SQLFactory factory;
+        auto insert=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("insertlecture"));
+        auto input=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlist=new QStringList;
+        if(UniSel=="University Duisburg-Essen")
+        {
+            input->Type="insertlecture";
+            QString LectureName=ui->NameEditor->text();
+            QString Semester=ui->SemesterEditor->text();
+            QString Module=ui->ModuleEditor->text();
+            QString EACTSCredit=ui->Credit->text();
+            QString Teachinghours=ui->Teachinghours->text();
+            inputlist->append("UDE");
+            inputlist->append(LectureName);
+            inputlist->append(Semester);
+            inputlist->append(Module);
+            inputlist->append(EACTSCredit);
+            inputlist->append(Teachinghours);
+            input->ExchangeData=inputlist;
+        }
+        if(UniSel=="University ZhengZhou")
+        {
+            input->Type="insertlecture";
+            QString LectureName=ui->NameEditor->text();
+            QString Type=ui->Typebox->currentText();
+            QString Module=ui->ModuleEditor->text();
+            QString CreditinUDE=ui->Credit->text();
+            QString Teachinghours=ui->Teachinghours->text();
+            inputlist->append("ZZU");
+            inputlist->append(LectureName);
+            inputlist->append(Type);
+            inputlist->append(Module);
+            inputlist->append(CreditinUDE);
+            inputlist->append(Teachinghours);
+            input->ExchangeData=inputlist;
+        }
+        insert->inputdata(input);
+        insert->setdb(db->getdb());
+        auto res=insert->exec();
+        if(res)
+        {
+            QMessageBox::information(NULL,"Info","Insert finished.");
+        }
+        else
+        {
+            QMessageBox::critical(NULL,"Error","Error happens during insert operation!");
+        }
     }
+
 }
 
 void LectureEditor::on_DelButton_clicked()
 {
-    auto UniSel=ui->UniSelect->currentText();
-    SQLFactory factory;
-    auto del=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("deletelecture"));
-    auto input=shared_ptr<queryexchange>(new queryexchange);
-    auto inputlist=new QStringList;
-    if(UniSel=="University Duisburg-Essen")
+    int currrow=-1;
+    currrow=ui->LectureView->currentIndex().row();
+    if(currrow==-1)
     {
-        input->Type="deletelecture";
-        inputlist->append("UDE");
-        int currrow=ui->LectureView->currentIndex().row();
-        QString UID=TableModel->item(currrow,0)->text();
-        inputlist->append(UID);
-        input->ExchangeData=inputlist;
-    }
-    if(UniSel=="University ZhengZhou")
-    {
-        input->Type="deletelecture";
-        inputlist->append("ZZU");
-        int currrow=ui->LectureView->currentIndex().row();
-        QString UID=TableModel->item(currrow,0)->text();
-        inputlist->append(UID);
-        input->ExchangeData=inputlist;
-    }
-    del->inputdata(input);
-    del->setdb(db->getdb());
-    auto res=del->exec();
-    if(res)
-    {
-        QMessageBox::information(NULL,"Info","Delete finished.");
+        QMessageBox::critical(NULL,"Error","No row selected!");
+        qDebug()<<"No row selected!";
+        wcout<<"No row selected!"<<endl;
     }
     else
     {
-        QMessageBox::critical(NULL,"Error","Error happens during delete operation!");
+        auto UniSel=ui->UniSelect->currentText();
+        SQLFactory factory;
+        auto del=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("deletelecture"));
+        auto input=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlist=new QStringList;
+        if(UniSel=="University Duisburg-Essen")
+        {
+            input->Type="deletelecture";
+            inputlist->append("UDE");
+
+            QString UID=TableModel->item(currrow,0)->text();
+            inputlist->append(UID);
+            input->ExchangeData=inputlist;
+        }
+        if(UniSel=="University ZhengZhou")
+        {
+            input->Type="deletelecture";
+            inputlist->append("ZZU");
+            QString UID=TableModel->item(currrow,0)->text();
+            inputlist->append(UID);
+            input->ExchangeData=inputlist;
+        }
+        del->inputdata(input);
+        del->setdb(db->getdb());
+        auto res=del->exec();
+        if(res)
+        {
+            QMessageBox::information(NULL,"Info","Delete finished.");
+        }
+        else
+        {
+            QMessageBox::critical(NULL,"Error","Error happens during delete operation!");
+        }
     }
+
 }
 
 void LectureEditor::on_UpdateButton_clicked()
 {
-    auto UniSel=ui->UniSelect->currentText();
-    SQLFactory factory;
-    auto upd=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("updatelecture"));
-    auto input=shared_ptr<queryexchange>(new queryexchange);
-    auto inputlist=new QStringList;
-    if(UniSel=="University Duisburg-Essen")
+    int currrow=-1;
+    currrow=ui->LectureView->currentIndex().row();
+    if(currrow==-1)
     {
-        int currrow=ui->LectureView->currentIndex().row();
-        QString UID=TableModel->item(currrow,0)->text();
-        input->Type="updatelecture";
-        QString LectureName=ui->NameEditor->text();
-        QString Semester=ui->SemesterEditor->text();
-        QString Module=ui->ModuleEditor->text();
-        QString EACTSCredit=ui->Credit->text();
-        QString Teachinghours=ui->Teachinghours->text();
-        inputlist->append("UDE");
-        inputlist->append(LectureName);
-        inputlist->append(Semester);
-        inputlist->append(Module);
-        inputlist->append(EACTSCredit);
-        inputlist->append(Teachinghours);
-        inputlist->append(UID);
-        input->ExchangeData=inputlist;
-    }
-    if(UniSel=="University ZhengZhou")
-    {
-        int currrow=ui->LectureView->currentIndex().row();
-        QString UID=TableModel->item(currrow,0)->text();
-        input->Type="updatelecture";
-        QString LectureName=ui->NameEditor->text();
-        QString Type=ui->Typebox->currentText();
-        QString Module=ui->ModuleEditor->text();
-        QString CreditinUDE=ui->Credit->text();
-        QString Teachinghours=ui->Teachinghours->text();
-        inputlist->append("ZZU");
-        inputlist->append(LectureName);
-        inputlist->append(Type);
-        inputlist->append(Module);
-        inputlist->append(CreditinUDE);
-        inputlist->append(Teachinghours);
-        inputlist->append(UID);
-        input->ExchangeData=inputlist;
-    }
-    upd->inputdata(input);
-    upd->setdb(db->getdb());
-    auto res=upd->exec();
-    if(res)
-    {
-        QMessageBox::information(NULL,"Info","Update finished.");
+        QMessageBox::critical(NULL,"Error","No row selected!");
+        qDebug()<<"No row selected!";
+        wcout<<"No row selected!"<<endl;
     }
     else
     {
-        QMessageBox::critical(NULL,"Error","Error happens during Update operation!");
+        auto UniSel=ui->UniSelect->currentText();
+        SQLFactory factory;
+        auto upd=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("updatelecture"));
+        auto input=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlist=new QStringList;
+        if(UniSel=="University Duisburg-Essen")
+        {
+            QString UID=TableModel->item(currrow,0)->text();
+            input->Type="updatelecture";
+            QString LectureName=ui->NameEditor->text();
+            QString Semester=ui->SemesterEditor->text();
+            QString Module=ui->ModuleEditor->text();
+            QString EACTSCredit=ui->Credit->text();
+            QString Teachinghours=ui->Teachinghours->text();
+            inputlist->append("UDE");
+            inputlist->append(LectureName);
+            inputlist->append(Semester);
+            inputlist->append(Module);
+            inputlist->append(EACTSCredit);
+            inputlist->append(Teachinghours);
+            inputlist->append(UID);
+            input->ExchangeData=inputlist;
+        }
+        if(UniSel=="University ZhengZhou")
+        {
+            QString UID=TableModel->item(currrow,0)->text();
+            input->Type="updatelecture";
+            QString LectureName=ui->NameEditor->text();
+            QString Type=ui->Typebox->currentText();
+            QString Module=ui->ModuleEditor->text();
+            QString CreditinUDE=ui->Credit->text();
+            QString Teachinghours=ui->Teachinghours->text();
+            inputlist->append("ZZU");
+            inputlist->append(LectureName);
+            inputlist->append(Type);
+            inputlist->append(Module);
+            inputlist->append(CreditinUDE);
+            inputlist->append(Teachinghours);
+            inputlist->append(UID);
+            input->ExchangeData=inputlist;
+        }
+        upd->inputdata(input);
+        upd->setdb(db->getdb());
+        auto res=upd->exec();
+        if(res)
+        {
+            QMessageBox::information(NULL,"Info","Update finished.");
+        }
+        else
+        {
+            QMessageBox::critical(NULL,"Error","Error happens during Update operation!");
+        }
     }
+
 }
 
 void LectureEditor::on_ExportButton_clicked()
@@ -423,14 +458,7 @@ void LectureEditor::on_ExportButton_clicked()
 void LectureEditor::on_EditMap_clicked()
 {
     int currow=-1;
-    try
-    {
-        currow=ui->LectureView->currentIndex().row();
-    }catch(exception &e)
-    {
-        wcout<<e.what()<<endl;
-        qDebug()<<QString::fromStdString(e.what());
-    }
+    currow=ui->LectureView->currentIndex().row();
     if(currow==-1)
     {
         QMessageBox::critical(NULL,"Error","No data in tableview!");

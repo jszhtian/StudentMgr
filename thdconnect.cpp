@@ -10,18 +10,8 @@ void thdconnect::setdb(shared_ptr<SQLBase> db)
 
 void thdconnect::run()
 {
-    if(sql.get()!=NULL){
-        try{
-            int res=sql->connect();
-            emit result(res);
-        }catch (exception& e){
-            cout<<"Error:"<<e.what()<<endl;
-        }
-
-    }
-    else
-    {
-        emit result(false);
-    }
-
+    qDebug()<<"thdconnect thread run";
+    wcout<<"thdconnect thread run"<<endl;
+    auto res=sql->connect();
+    emit result(res);
 }

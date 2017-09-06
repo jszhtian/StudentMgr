@@ -6,8 +6,6 @@ bool debugflag=true;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
     //add non-ASCII CodePage support
     setlocale(LC_CTYPE, "");
     if(debugflag)
@@ -19,5 +17,8 @@ int main(int argc, char *argv[])
           freopen("CONOUT$","w",stdout);
          }
     }
+    MainWindow w;
+    w.show();
+
     return a.exec();
 }
