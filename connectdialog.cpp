@@ -10,6 +10,7 @@ ConnectDialog::ConnectDialog(QWidget *parent) :
     wcout<<"ConnectDialog create"<<endl;
 }
 
+
 ConnectDialog::~ConnectDialog()
 {
     delete ui;

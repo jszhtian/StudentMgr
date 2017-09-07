@@ -476,6 +476,7 @@ void LectureEditor::on_EditMap_clicked()
         dlg->initDB(db);
         dlg->setUni(uni);
         dlg->setLectUID(UID);
+        dlg->prepare();
         dlg->exec();
         delete dlg;
     }

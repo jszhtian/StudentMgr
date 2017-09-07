@@ -174,3 +174,10 @@ void MainWindow::on_actionStudentEditor_triggered()
     newwidget->initDB(sqldb);
     setCentralWidget(newwidget);
 }
+
+void MainWindow::on_actionExamEditor_triggered()
+{
+    ScoreMgr* newwidget=new ScoreMgr(this);
+    newwidget->initDB(sqldb);
+    setCentralWidget(newwidget);
+}

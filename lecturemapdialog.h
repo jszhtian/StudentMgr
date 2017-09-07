@@ -20,6 +20,7 @@ public:
     void setUni(QString);
     void initDB(shared_ptr<SQLBase> setdb);
     void setLectUID(QString UID);
+    void prepare();
 private slots:
     void on_AddBut_clicked();
 

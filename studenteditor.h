@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include "sqlbase.h"
 #include "sqlfactory.h"
+#include "majorselectdialog.h"
 
 namespace Ui {
 class StudentEditor;
@@ -37,6 +38,9 @@ private slots:
 
     void on_ExportButton_clicked();
 
+    void on_MajorButton_clicked();
+
+    void slot_sortbyColumn(int);
 private:
     void InitViewModel();
     void getMajorMap();

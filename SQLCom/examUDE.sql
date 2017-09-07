@@ -8,7 +8,7 @@ Create Table [UDEExam]
 	[Examscore] [float] NOT NULL,
 	[Examnote] [float] NOT NULL,
 	[Semester] [int] NOT NULL,
-	[Examdatastamp] [timestamp] NOT NULL,
+	[Examdatestamp] [datestamp] NOT NULL,
 	Primary Key([ExamUUID]),
 	foreign key([StudentUUID]) references Student([StudentUUID]) on delete cascade on update cascade,
 	foreign key([LectureUUID]) references LectureinUDE([LectureUUID]) on delete cascade on update cascade

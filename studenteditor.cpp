@@ -10,6 +10,7 @@ StudentEditor::StudentEditor(QWidget *parent) :
     InitViewModel();
     ui->tableView->setModel(TableModel);
     ui->tableView->setColumnHidden(0,true);
+    connect(ui->tableView->horizontalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(slot_sortbyColumn(int)));
     qDebug()<<"studenteditor create";
     wcout<<"studenteditor create"<<endl;
 }
@@ -302,11 +303,11 @@ void StudentEditor::on_deleteButton_clicked()
         auto res=del->exec();
         if(res)
         {
-            QMessageBox::information(NULL,"Info","Insert finished.");
+            QMessageBox::information(NULL,"Info","Delete finished.");
         }
         else
         {
-            QMessageBox::critical(NULL,"Error","Error happens during insert operation!");
+            QMessageBox::critical(NULL,"Error","Error happens during delete operation!");
         }
     }
 }
@@ -346,4 +347,25 @@ void StudentEditor::on_ExportButton_clicked()
         QMessageBox::information(NULL, "Export", "Nothing Exported!");
     }
     delete fileDialog;
+}
+
+void StudentEditor::on_MajorButton_clicked()
+{
+    MajorSelectDialog* dlg=new MajorSelectDialog(this);
+    dlg->SetUni("ZZU");
+    dlg->initDB(db);
+    dlg->prepare();
+    if(dlg->Rejected==dlg->exec())
+    {
+        QMessageBox::information(NULL,"Info","No Selection!");
+    }
+    else
+    {
+        ui->ZZUEdit->setText(dlg->getSelectName());
+    }
+}
+
+void StudentEditor::slot_sortbyColumn(int column)
+{
+    ui->tableView->sortByColumn(column);
 }

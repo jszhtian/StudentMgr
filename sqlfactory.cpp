@@ -92,18 +92,26 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
 {
     if(COMname.toLower()=="listlecture")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new listlecture;
     }
     if(COMname.toLower()=="listlectureuid")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new listlectureuid;
     }
     if(COMname.toLower()=="insertlecture")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new insertlecture;
     }
     if(COMname.toLower()=="insertlecturemap")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new insertlecturemap;
     }
     if(COMname.toLower()=="deletelecture")
@@ -112,63 +120,117 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
     }
     if(COMname.toLower()=="deletelecturemap")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new deletelecturemap;
     }
     if(COMname.toLower()=="updatelecture")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new updatelecture;
     }
     if(COMname.toLower()=="listlecturemap")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new listLectureMap;
     }
     if(COMname.toLower()=="listmajor")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new listmajor;
     }
     if(COMname.toLower()=="listmajoruid")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new listmajoruid;
     }
     if(COMname.toLower()=="insertmajor")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new insertmajor;
     }
     if(COMname.toLower()=="deletemajor")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new deletemajor;
     }
     if(COMname.toLower()=="updatemajor")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new updatemajor;
     }
     if(COMname.toLower()=="listlectureselect")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new listLectureSelect;
     }
     if(COMname.toLower()=="insertlectureselect")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new insertlectureselect;
     }
     if(COMname.toLower()=="deletelectureselect")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new deletelectureselect;
     }
     if(COMname.toLower()=="liststudent")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new liststudent;
     }
     if(COMname.toLower()=="insertstudent")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new insertstudent;
     }
     if(COMname.toLower()=="deletestudent")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new deletestudent;
     }
     if(COMname.toLower()=="updatestudent")
     {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new updatestudent;
+    }
+    if(COMname.toLower()=="listexam")
+    {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
+        return new listexam;
+    }
+    if(COMname.toLower()=="updateexam")
+    {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
+        return new updateexam;
+    }
+    if(COMname.toLower()=="deleteexam")
+    {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
+        return new deleteexam;
+    }
+    if(COMname.toLower()=="insertexam")
+    {
+        qDebug()<<"Call Function "<<COMname;
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
+        return new insertexam;
     }
     return NULL;
 }
@@ -1630,6 +1692,402 @@ void updatestudent::setdb(QSqlDatabase setdb)
 }
 
 bool updatestudent::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool listexam::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="listexam")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        Query.prepare("SELECT [ExamUUID] ,[Name],Student.StudentID ,[LectureName]  ,[Examscore] ,[Examnote] ,[UDEExam].Semester ,[Examdatestamp] FROM [dbo].[UDEExam], [dbo].LectureinUDE,[dbo].Student where [UDEExam].StudentUUID=Student.StudentUUID and [UDEExam].LectureUUID=LectureinUDE.LectureUUID");
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        Query.prepare("SELECT [ExamUUID] ,Student.Name,Student.StudentID ,LectureinZZU.LectureName ,LectureinUDE.LectureName ,LectureinZZU.Type,[Examscore] ,[Examnote],[ZZUExam].[Semester],[Examdatestamp] FROM [dbo].[ZZUExam],[dbo].LectureinZZU,[dbo].LectureinUDE,dbo.LectureMap,dbo.Student where ZZUExam.LectureUUID=LectureinZZU.LectureUUID and LectureMap.UDELectureUUID=LectureinUDE.LectureUUID and LectureMap.ZZULectureUUID=LectureinZZU.LectureUUID and ZZUExam.StudentUUID=Student.StudentUUID");
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="SelectExam")
+    {
+        Uni="SelExam";
+        Query.prepare("SELECT [ExamUUID],[Student].[name],Student.StudentID,[Examscore],[type],[Examdatestamp] FROM [dbo].[SelectionExam],[dbo].[Student] where [SelectionExam].StudentUUID=Student.StudentUUID");
+        return true;
+    }
+    return false;
+}
+
+bool listexam::outputdata(shared_ptr<queryexchange> output)
+{
+    if(Uni.isEmpty())
+    {
+        return false;
+    }
+    if(Uni=="UDE")
+    {
+        output->Type="UDEExam";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified()+",";
+            result+=Query.value(1).toString().simplified()+",";
+            result+=Query.value(2).toString().simplified()+",";
+            result+=Query.value(3).toString().simplified()+",";
+            result+=Query.value(4).toString().simplified()+",";
+            result+=Query.value(5).toString().simplified()+",";
+            result+=Query.value(6).toString().simplified()+",";
+            result+=Query.value(7).toDateTime().toString("yyyy-MM-dd hh:mm:ss");
+            output->ExchangeData->append(result);
+        }
+        return true;
+    }
+    if(Uni=="ZZU")
+    {
+        output->Type="ZZUExam";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified()+",";
+            result+=Query.value(1).toString().simplified()+",";
+            result+=Query.value(2).toString().simplified()+",";
+            result+=Query.value(3).toString().simplified()+",";
+            result+=Query.value(4).toString().simplified()+",";
+            result+=Query.value(5).toString().simplified()+",";
+            result+=Query.value(6).toString().simplified()+",";
+            result+=Query.value(7).toString().simplified()+",";
+            result+=Query.value(8).toString().simplified()+",";
+            result+=Query.value(9).toDateTime().toString("yyyy-MM-dd hh:mm:ss");
+            output->ExchangeData->append(result);
+        }
+        return true;
+    }
+    if(Uni=="SelExam")
+    {
+        output->Type="SelExam";
+        while(Query.next())
+        {
+            QString result=Query.value(0).toString().simplified()+",";
+            result+=Query.value(1).toString().simplified()+",";
+            result+=Query.value(2).toString().simplified()+",";
+            result+=Query.value(3).toString().simplified()+",";
+            result+=Query.value(4).toString().simplified()+",";
+            result+=Query.value(5).toDateTime().toString("yyyy-MM-dd hh:mm:ss");
+            output->ExchangeData->append(result);
+        }
+        return true;
+    }
+    return false;
+}
+
+void listexam::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool listexam::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool insertexam::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="insertexam")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        if(input->ExchangeData->size()!=7)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        Query.prepare("INSERT INTO [dbo].[UDEExam]([StudentUUID] ,[LectureUUID],[Examscore],[Examnote],[Semester],[Examdatestamp]) VALUES (:UID,:LID,:Score,:Note,:semester,:date)");
+        Query.bindValue(0,input->ExchangeData->at(1));
+        Query.bindValue(1,input->ExchangeData->at(2));
+        Query.bindValue(2,input->ExchangeData->at(3).toDouble());
+        Query.bindValue(3,input->ExchangeData->at(4).toDouble());
+        Query.bindValue(4,input->ExchangeData->at(5).toInt());
+        Query.bindValue(5,QDateTime::fromString(input->ExchangeData->at(6),"yyyy-MM-dd hh:mm:ss"));
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        if(input->ExchangeData->size()!=7)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        Query.prepare("INSERT INTO [dbo].[ZZUExam]([StudentUUID],[LectureUUID],[Examscore] ,[Examnote] ,[Semester],[Examdatestamp]) VALUES( :UID,:LID ,:score,:note,:semester ,:date)");
+        Query.bindValue(0,input->ExchangeData->at(1));
+        Query.bindValue(1,input->ExchangeData->at(2));
+        Query.bindValue(2,input->ExchangeData->at(3).toDouble());
+        Query.bindValue(3,input->ExchangeData->at(4).toDouble());
+        Query.bindValue(4,input->ExchangeData->at(5).toInt());
+        Query.bindValue(5,QDateTime::fromString(input->ExchangeData->at(6),"yyyy-MM-dd hh:mm:ss"));
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="SelectExam")
+    {
+        Uni="SelExam";
+        if(input->ExchangeData->size()!=5)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        Query.prepare("INSERT INTO [dbo].[SelectionExam]([StudentUUID] ,[Examscore],[type],[Examdatestamp])VALUES (:UID,:score,:type,:data)");
+        Query.bindValue(0,input->ExchangeData->at(1));
+        Query.bindValue(1,input->ExchangeData->at(2).toDouble());
+        Query.bindValue(2,input->ExchangeData->at(3));
+        Query.bindValue(3,QDateTime::fromString(input->ExchangeData->at(4),"yyyy-MM-dd hh:mm:ss"));
+        return true;
+    }
+    return false;
+}
+
+bool insertexam::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void insertexam::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool insertexam::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool deleteexam::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="deleteexam")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        QString UID=input->ExchangeData->at(1);
+        Query.prepare("DELETE FROM [dbo].[UDEExam] WHERE ExamUUID=:UID");
+        Query.bindValue(0,UID);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        QString UID=input->ExchangeData->at(1);
+        Query.prepare("DELETE FROM [dbo].[ZZUExam] WHERE ExamUUID=:UID");
+        Query.bindValue(0,UID);
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="SelectExam")
+    {
+        Uni="SelExam";
+        QString UID=input->ExchangeData->at(1);
+        Query.prepare("DELETE FROM [dbo].[SelectionExam] WHERE ExamUUID=:UID");
+        Query.bindValue(0,UID);
+        return true;
+    }
+    return false;
+}
+
+bool deleteexam::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void deleteexam::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool deleteexam::exec()
+{
+    MyProdlg dlg;
+    //change to multi thread method
+    auto m_thread=new thdSQLExec();
+    m_thread->setDatebase(&db);
+    m_thread->setquery(&Query);
+    m_thread->start();
+    //m_thread->wait();
+    while(!m_thread->isFinished())
+    {
+        qApp->processEvents();
+    }
+    dlg.close();
+    return m_thread->getresult();
+}
+
+bool updateexam::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="updateexam")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Uni="UDE";
+        if(input->ExchangeData->size()!=8)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        Query.prepare("UPDATE [dbo].[UDEExam] SET [StudentUUID] = :uid,[LectureUUID] = :lid,[Examscore] = :score,[Examnote] = :note,[Semester] =:semester ,[Examdatestamp] =:date WHERE [ExamUUID] = :examid");
+        Query.bindValue(0,input->ExchangeData->at(2));
+        Query.bindValue(1,input->ExchangeData->at(3));
+        Query.bindValue(2,input->ExchangeData->at(4).toDouble());
+        Query.bindValue(3,input->ExchangeData->at(5).toDouble());
+        Query.bindValue(4,input->ExchangeData->at(6).toInt());
+        Query.bindValue(5,QDateTime::fromString(input->ExchangeData->at(7),"yyyy-MM-dd hh:mm:ss"));
+        Query.bindValue(6,input->ExchangeData->at(1));
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Uni="ZZU";
+        if(input->ExchangeData->size()!=8)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        Query.prepare("UPDATE [dbo].[ZZUExam] SET [StudentUUID] = :uid,[LectureUUID] = :lid,[Examscore] = :score,[Examnote] = :note,[Semester] =:semester ,[Examdatestamp] =:date WHERE [ExamUUID] = :examid");
+        Query.bindValue(0,input->ExchangeData->at(2));
+        Query.bindValue(1,input->ExchangeData->at(3));
+        Query.bindValue(2,input->ExchangeData->at(4).toDouble());
+        Query.bindValue(3,input->ExchangeData->at(5).toDouble());
+        Query.bindValue(4,input->ExchangeData->at(6).toInt());
+        Query.bindValue(5,QDateTime::fromString(input->ExchangeData->at(7),"yyyy-MM-dd hh:mm:ss"));
+        Query.bindValue(6,input->ExchangeData->at(1));
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="SelectExam")
+    {
+        Uni="SelExam";
+        if(input->ExchangeData->size()!=6)
+        {
+            wcout<<"insertlecture:Not match number of parameters!";
+            qDebug()<<"insertlecture:Not match number of parameters!";
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
+        Query.prepare("UPDATE [dbo].[SelectionExam] SET [StudentUUID] = :UID,[Examscore] = :LID,[type] = :type,[Examdatestamp] = :date WHERE [ExamUUID] = :examID");
+        Query.bindValue(0,input->ExchangeData->at(2));
+        Query.bindValue(1,input->ExchangeData->at(3).toDouble());
+        Query.bindValue(2,input->ExchangeData->at(4));
+        Query.bindValue(3,QDateTime::fromString(input->ExchangeData->at(5),"yyyy-MM-dd hh:mm:ss"));
+        Query.bindValue(4,input->ExchangeData->at(1));
+        return true;
+    }
+    return false;
+}
+
+bool updateexam::outputdata(shared_ptr<queryexchange> output)
+{
+    return true;
+}
+
+void updateexam::setdb(QSqlDatabase setdb)
+{
+    db=setdb;
+}
+
+bool updateexam::exec()
 {
     MyProdlg dlg;
     //change to multi thread method

@@ -32,6 +32,14 @@ void LectureMapDialog::setLectUID(QString UID)
     lectUID=UID;
 }
 
+void LectureMapDialog::prepare()
+{
+    if(!lectUID.isEmpty()&&db.get()!=NULL)
+    {
+        on_RefreshButton_clicked();
+    }
+}
+
 void LectureMapDialog::on_AddBut_clicked()
 {
     lectureselectDialog* dlg=new lectureselectDialog(this);
@@ -42,6 +50,7 @@ void LectureMapDialog::on_AddBut_clicked()
     if(Uni=="ZZU")tarUni="UDE";
     dlg->SetUni(tarUni);
     dlg->initDB(db);
+    dlg->prepare();
     if(dlg->Rejected==dlg->exec())
     {
         QMessageBox::information(NULL,"Info","No Selection!");

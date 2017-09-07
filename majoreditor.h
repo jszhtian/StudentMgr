@@ -9,6 +9,7 @@
 #include "sqlfactory.h"
 #include "lectureselectdialog.h"
 #include <QStandardItemModel>
+#include "majorselectdialog.h"
 namespace Ui {
 class MajorEditor;
 }
@@ -42,6 +43,8 @@ private slots:
     void on_AddLectureButton_clicked();
 
     void on_DeleteLecture_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     void InitViewModel();

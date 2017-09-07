@@ -7,7 +7,6 @@
 #include "sqlbase.h"
 #include "sqlfactory.h"
 #include <QStandardItemModel>
-#include <QSortFilterProxyModel>
 #include <QFile>
 #include <QFileDialog>
 #include "lecturemapdialog.h"

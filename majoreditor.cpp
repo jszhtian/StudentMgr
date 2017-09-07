@@ -14,10 +14,12 @@ MajorEditor::MajorEditor(QWidget *parent) :
     if(Unisel=="University ZhengZhou")
     {
         ui->MapEdit->setEnabled(true);
+        ui->pushButton_2->setEnabled(true);
     }
     if(Unisel=="University Duisburg-Essen")
     {
         ui->MapEdit->setEnabled(false);
+        ui->pushButton_2->setEnabled(false);
     }
     connect(ui->MajorView->horizontalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(slot_sortbyColumn(int)));
     qDebug()<<"MajorEditor create";
@@ -316,12 +318,14 @@ void MajorEditor::on_Unibox_activated(const QString &arg1)
         ui->MapEdit->setEnabled(true);
         GetList();
         ui->LectureList->clear();
+        ui->pushButton_2->setEnabled(true);
     }
     if(arg1=="University Duisburg-Essen")
     {
         ui->MapEdit->setEnabled(false);
         GetList();
         ui->LectureList->clear();
+        ui->pushButton_2->setEnabled(false);
     }
 }
 
@@ -350,6 +354,7 @@ void MajorEditor::on_MajorView_clicked(const QModelIndex &index)
         ui->SupervisorEdit->setText(TableModel->item(index.row(),2)->text());
         ui->MapEdit->setText(TableModel->item(index.row(),3)->text());
     }
+    on_loadLectureButton_clicked();
 }
 
 void MajorEditor::on_InsertButton_clicked()
@@ -795,4 +800,39 @@ void MajorEditor::on_DeleteLecture_clicked()
     {
         QMessageBox::critical(NULL,"Error","Cannot get UID information!");
     }
+}
+
+void MajorEditor::on_pushButton_2_clicked()
+{
+    MajorSelectDialog* dlg=new MajorSelectDialog(this);
+    QString Unisel=ui->Unibox->currentText();
+    QString Uni;
+    if(Unisel=="University Duisburg-Essen")
+    {
+        Uni="ZZU";
+    }
+    if(Unisel=="University ZhengZhou")
+    {
+        Uni="UDE";
+    }
+    if(Uni.isEmpty())
+    {
+        wcout<<"Unexpected error, at on_pushButton_2_clicked"<<endl;
+        qDebug()<<"Unexpected error, at on_pushButton_2_clicked";
+    }
+    else
+    {
+        dlg->SetUni(Uni);
+        dlg->initDB(db);
+        dlg->prepare();
+        if(dlg->Rejected==dlg->exec())
+        {
+            QMessageBox::information(NULL,"Info","No Selection!");
+        }
+        else
+        {
+            ui->MapEdit->setText(dlg->getSelectName());
+        }
+    }
+    delete dlg;
 }

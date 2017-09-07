@@ -39,8 +39,9 @@ SOURCES += \
     lecturemapdialog.cpp \
     lectureselectdialog.cpp \
     studenteditor.cpp \
+    majorselectdialog.cpp \
     scoremgr.cpp \
-    majorselectdialog.cpp
+    studentselectdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -59,8 +60,9 @@ HEADERS += \
     lecturemapdialog.h \
     lectureselectdialog.h \
     studenteditor.h \
+    majorselectdialog.h \
     scoremgr.h \
-    majorselectdialog.h
+    studentselectdialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -70,8 +72,9 @@ FORMS += \
     lecturemapdialog.ui \
     lectureselectdialog.ui \
     studenteditor.ui \
+    majorselectdialog.ui \
     scoremgr.ui \
-    majorselectdialog.ui
+    studentselectdialog.ui
 
 #win32:CONFIG += console
 #for debug output!

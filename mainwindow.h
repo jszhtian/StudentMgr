@@ -12,6 +12,7 @@
 #include "thdconnect.h"
 #include "majoreditor.h"
 #include "studenteditor.h"
+#include "scoremgr.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,6 +37,8 @@ private slots:
     void on_actionMajorEditor_triggered();
 
     void on_actionStudentEditor_triggered();
+
+    void on_actionExamEditor_triggered();
 
 private:
     Ui::MainWindow *ui;

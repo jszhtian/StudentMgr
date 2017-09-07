@@ -20,6 +20,7 @@ public:
     void SetUni(QString);
     QString getSelectName();
     QString getSelectUID();
+    void prepare();
     void initDB(shared_ptr<SQLBase> setdb);
 
 private slots:
