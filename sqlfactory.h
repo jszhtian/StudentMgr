@@ -19,12 +19,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ZZULecture||UDELecture&data is lecture information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class liststudent:public SQLCommandBase
@@ -34,12 +28,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=NULL&data is student information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class listexam:public SQLCommandBase
@@ -49,12 +37,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ZZU|UDE|SelectExam&data is exam information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class listmajor:public SQLCommandBase
@@ -64,12 +46,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ZZUlistmajor||UDElistmajor&data is lecture information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class listLectureMap:public SQLCommandBase
@@ -79,12 +55,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ListLectureMap||UDELecture&data is lecture information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class listLectureSelect:public SQLCommandBase
@@ -94,12 +64,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ListLectureMap||UDELecture&data is lecture information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class listlectureuid:public SQLCommandBase
@@ -109,12 +73,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ZZULecture||UDELecture&data is lecture information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class listmajoruid:public SQLCommandBase
@@ -124,12 +82,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=ZZUMajor||UDEmajor&data is lecture information
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class insertlecture:public SQLCommandBase
@@ -139,12 +91,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class insertstudent:public SQLCommandBase
@@ -154,12 +100,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class insertexam:public SQLCommandBase
@@ -169,12 +109,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class deleteexam:public SQLCommandBase
@@ -184,12 +118,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class updateexam:public SQLCommandBase
@@ -199,12 +127,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class insertmajor:public SQLCommandBase
@@ -214,12 +136,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class insertlecturemap:public SQLCommandBase
@@ -229,12 +145,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class insertlectureselect:public SQLCommandBase
@@ -244,12 +154,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:Type=None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class deletelecture:public SQLCommandBase
@@ -259,12 +163,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class deletestudent:public SQLCommandBase
@@ -274,12 +172,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class deletemajor:public SQLCommandBase
@@ -289,12 +181,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class deletelectureselect:public SQLCommandBase
@@ -304,12 +190,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class deletelecturemap:public SQLCommandBase
@@ -319,12 +199,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class updatelecture:public SQLCommandBase
@@ -334,12 +208,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class updatemajor:public SQLCommandBase
@@ -349,12 +217,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 class updatestudent:public SQLCommandBase
@@ -364,12 +226,6 @@ public:
     bool inputdata(shared_ptr<queryexchange> input);
     //Output:None
     bool outputdata(shared_ptr<queryexchange> output);
-    void setdb(QSqlDatabase setdb);
-    bool exec();
-private:
-    QSqlDatabase db;
-    QSqlQuery Query;
-    QString Uni;
 };
 
 #endif // SQLFACTORY_H

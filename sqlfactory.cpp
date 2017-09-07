@@ -5,88 +5,7 @@ inline bool insertSecurityCheck(QString Str)
     return !(Str.contains(";")||Str.contains(",")||Str.contains("}")||Str.contains(")")||Str.contains("]"));
 }
 
-bool listlecture::inputdata(shared_ptr<queryexchange> input)
-{
-    if(input->Type.toLower()!="listlecture")
-    {
-        return false;
-    }
-    if(input->ExchangeData->at(0)=="ZZU")
-    {
-        Query.prepare("select [LectureUUID],[LectureName],[Type],[Module],[CreditinUDE],[Teachinghours] from [ZZU-DB].[dbo].[LectureinZZU]");
-        Uni="ZZU";
-        return true;
-    }
-    if(input->ExchangeData->at(0)=="UDE")
-    {
-        Query.prepare("select [LectureUUID],[LectureName],[Semester],[Module],[EACTSCredit],[Teachinghours] from [ZZU-DB].[dbo].[LectureinUDE]");
-        Uni="UDE";
-        return true;
-    }
-    return false;
-}
 
-bool listlecture::outputdata(shared_ptr<queryexchange> output)
-{
-    if(Uni.isEmpty())
-    {
-        return false;
-    }
-    else
-    {
-        if(Uni=="ZZU")
-        {
-            output->Type="ZZULecture";
-            while(Query.next())
-            {
-                QString result=Query.value(0).toString().simplified()+",";
-                result+=Query.value(1).toString().simplified()+",";
-                result+=Query.value(2).toString().simplified()+",";
-                result+=Query.value(3).toString().simplified()+",";
-                result+=Query.value(4).toString().simplified()+",";
-                result+=Query.value(5).toString().simplified();
-                output->ExchangeData->append(result);
-            }
-        }
-        if(Uni=="UDE")
-        {
-            output->Type="UDELecture";
-            while(Query.next())
-            {
-                QString result=Query.value(0).toString().simplified()+",";
-                result+=Query.value(1).toString().simplified()+",";
-                result+=Query.value(2).toString().simplified()+",";
-                result+=Query.value(3).toString().simplified()+",";
-                result+=Query.value(4).toString().simplified()+",";
-                result+=Query.value(5).toString().simplified();
-                output->ExchangeData->append(result);
-            }
-        }
-        return false;
-    }
-}
-
-inline void listlecture::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool listlecture::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
 {
@@ -235,6 +154,67 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
     return NULL;
 }
 
+bool listlecture::inputdata(shared_ptr<queryexchange> input)
+{
+    if(input->Type.toLower()!="listlecture")
+    {
+        return false;
+    }
+    if(input->ExchangeData->at(0)=="ZZU")
+    {
+        Query.prepare("select [LectureUUID],[LectureName],[Type],[Module],[CreditinUDE],[Teachinghours] from [ZZU-DB].[dbo].[LectureinZZU]");
+        Uni="ZZU";
+        return true;
+    }
+    if(input->ExchangeData->at(0)=="UDE")
+    {
+        Query.prepare("select [LectureUUID],[LectureName],[Semester],[Module],[EACTSCredit],[Teachinghours] from [ZZU-DB].[dbo].[LectureinUDE]");
+        Uni="UDE";
+        return true;
+    }
+    return false;
+}
+
+bool listlecture::outputdata(shared_ptr<queryexchange> output)
+{
+    if(Uni.isEmpty())
+    {
+        return false;
+    }
+    else
+    {
+        if(Uni=="ZZU")
+        {
+            output->Type="ZZULecture";
+            while(Query.next())
+            {
+                QString result;
+                for(int i=0;i<6;i++)
+                {
+                    result+=Query.value(i).toString().simplified()+",";
+                }
+                output->ExchangeData->append(result);
+            }
+            return true;
+        }
+        if(Uni=="UDE")
+        {
+            output->Type="UDELecture";
+            while(Query.next())
+            {
+                QString result;
+                for(int i=0;i<6;i++)
+                {
+                    result+=Query.value(i).toString().simplified()+",";
+                }
+                output->ExchangeData->append(result);
+            }
+            return true;
+        }
+        return false;
+    }
+}
+
 
 
 bool listlectureuid::inputdata(shared_ptr<queryexchange> input)
@@ -289,27 +269,6 @@ bool listlectureuid::outputdata(shared_ptr<queryexchange> output)
     return false;
 }
 
-void listlectureuid::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool listlectureuid::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool insertlecture::inputdata(shared_ptr<queryexchange> input)
 {
@@ -330,36 +289,16 @@ bool insertlecture::inputdata(shared_ptr<queryexchange> input)
         QString Module=input->ExchangeData->at(3);
         QString EACTSCredit=input->ExchangeData->at(4);
         QString Teachinghours=input->ExchangeData->at(5);
-        if(!insertSecurityCheck(LectureName))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
-        if(!insertSecurityCheck(Semester))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Module))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(EACTSCredit))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Teachinghours))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
+
         Query.prepare("INSERT INTO [dbo].[LectureinUDE]([LectureName],[Module],[Semester],[EACTSCredit],[Teachinghours])VALUES(:LectureName,:Module,:Semester,:EACTSCredit,:Teachinghours)");
         Query.bindValue(0,LectureName);
         Query.bindValue(1,Module.toInt());
@@ -382,35 +321,14 @@ bool insertlecture::inputdata(shared_ptr<queryexchange> input)
         QString Module=input->ExchangeData->at(3);
         QString CreditinUDE=input->ExchangeData->at(4);
         QString Teachinghours=input->ExchangeData->at(5);
-        if(!insertSecurityCheck(LectureName))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Type))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Module))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(CreditinUDE))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Teachinghours))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         Query.prepare("INSERT INTO [dbo].[LectureinZZU]([LectureName],[Module],[Type],[CreditinUDE],[Teachinghours])VALUES(:LectureName,:Module,:Type,:CreditinUDE,:Teachinghours)");
         Query.bindValue(0,LectureName);
@@ -429,27 +347,6 @@ bool insertlecture::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void insertlecture::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool insertlecture::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool deletelecture::inputdata(shared_ptr<queryexchange> input)
 {
@@ -460,28 +357,36 @@ bool deletelecture::inputdata(shared_ptr<queryexchange> input)
     if(input->ExchangeData->at(0)=="UDE")
     {
         Uni="UDE";
+
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
         Query.prepare("DELETE FROM [dbo].[LectureinUDE] where [LectureUUID]=:UID");
         QString tmp=input->ExchangeData->at(1);
-        if(!insertSecurityCheck(tmp))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
         Query.bindValue(0,tmp);
         return true;
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
         Uni="ZZU";
+
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
         Query.prepare("DELETE FROM [dbo].[LectureinZZU] where [LectureUUID]=:UID");
         QString tmp=input->ExchangeData->at(1);
-        if(!insertSecurityCheck(tmp))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
         Query.bindValue(0,tmp);
         return true;
     }
@@ -493,27 +398,6 @@ bool deletelecture::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void deletelecture::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool deletelecture::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool updatelecture::inputdata(shared_ptr<queryexchange> input)
 {
@@ -535,41 +419,14 @@ bool updatelecture::inputdata(shared_ptr<queryexchange> input)
         QString EACTSCredit=input->ExchangeData->at(4);
         QString Teachinghours=input->ExchangeData->at(5);
         QString UID=input->ExchangeData->at(6);
-        if(!insertSecurityCheck(LectureName))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Semester))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Module))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(EACTSCredit))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Teachinghours))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(UID))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         Query.prepare("UPDATE [dbo].[LectureinUDE] SET [LectureName] = :Name,[Module] = :Module,[Semester] = :semester ,[EACTSCredit] = :credit,[Teachinghours] = :hours WHERE [LectureUUID]=:UID");
         Query.bindValue(0,LectureName);
@@ -595,41 +452,14 @@ bool updatelecture::inputdata(shared_ptr<queryexchange> input)
         QString CreditinUDE=input->ExchangeData->at(4);
         QString Teachinghours=input->ExchangeData->at(5);
         QString UID=input->ExchangeData->at(6);
-        if(!insertSecurityCheck(LectureName))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Type))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Module))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(CreditinUDE))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(Teachinghours))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(UID))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         Query.prepare("UPDATE [dbo].[LectureinZZU]   SET [LectureName] = :Name,[Type] = :type,[Module] = :module,[CreditinUDE] = :credit,[Teachinghours] = :hour WHERE [LectureUUID]=:UID");
         Query.bindValue(0,LectureName);
@@ -649,27 +479,6 @@ bool updatelecture::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void updatelecture::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool updatelecture::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 
 bool listLectureMap::inputdata(shared_ptr<queryexchange> input)
@@ -739,27 +548,6 @@ bool listLectureMap::outputdata(shared_ptr<queryexchange> output)
     return false;
 }
 
-void listLectureMap::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool listLectureMap::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool insertlecturemap::inputdata(shared_ptr<queryexchange> input)
 {
@@ -772,17 +560,14 @@ bool insertlecturemap::inputdata(shared_ptr<queryexchange> input)
         Uni="UDE";
         QString UID1=input->ExchangeData->at(1);
         QString UID2=input->ExchangeData->at(2);
-        if(!insertSecurityCheck(UID1))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(UID2))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         Query.prepare("INSERT INTO [dbo].[LectureMap]([ZZULectureUUID],[UDELectureUUID])VALUES(:UID1,:UID2)");
         Query.bindValue(0,UID2);
@@ -794,17 +579,14 @@ bool insertlecturemap::inputdata(shared_ptr<queryexchange> input)
         Uni="ZZU";
         QString UID1=input->ExchangeData->at(1);
         QString UID2=input->ExchangeData->at(2);
-        if(!insertSecurityCheck(UID1))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(UID2))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         Query.prepare("INSERT INTO [dbo].[LectureMap]([ZZULectureUUID],[UDELectureUUID])VALUES(:UID1,:UID2)");
         Query.bindValue(0,UID1);
@@ -819,27 +601,7 @@ bool insertlecturemap::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void insertlecturemap::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
 
-bool insertlecturemap::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool deletelecturemap::inputdata(shared_ptr<queryexchange> input)
 {
@@ -852,17 +614,14 @@ bool deletelecturemap::inputdata(shared_ptr<queryexchange> input)
         Uni="UDE";
         QString UID1=input->ExchangeData->at(1);
         QString UID2=input->ExchangeData->at(2);
-        if(!insertSecurityCheck(UID1))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(UID2))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         Query.prepare("DELETE FROM [dbo].[LectureMap]WHERE UDELectureUUID=:UID1 and ZZULectureUUID=:UID2");
         Query.bindValue(0,UID1);
@@ -874,17 +633,14 @@ bool deletelecturemap::inputdata(shared_ptr<queryexchange> input)
         Uni="ZZU";
         QString UID1=input->ExchangeData->at(1);
         QString UID2=input->ExchangeData->at(2);
-        if(!insertSecurityCheck(UID1))
+        for(int i=0;i<input->ExchangeData->size();++i)
         {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
-        }
-        if(!insertSecurityCheck(UID2))
-        {
-            cout<<"Illegal character detected!"<<endl;
-            qDebug()<<"Illegal character detected!";
-            return false;
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         Query.prepare("DELETE FROM [dbo].[LectureMap]WHERE ZZULectureUUID=:UID1 and UDELectureUUID=:UID2");
         Query.bindValue(0,UID1);
@@ -899,27 +655,6 @@ bool deletelecturemap::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void deletelecturemap::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool deletelecturemap::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool listmajor::inputdata(shared_ptr<queryexchange> input)
 {
@@ -955,10 +690,11 @@ bool listmajor::outputdata(shared_ptr<queryexchange> output)
             output->Type="ZZUMajor";
             while(Query.next())
             {
-                QString result=Query.value(0).toString().simplified()+",";
-                result+=Query.value(1).toString().simplified()+",";
-                result+=Query.value(2).toString().simplified()+",";
-                result+=Query.value(3).toString().simplified();
+                QString result;
+                for(int i=0;i<4;i++)
+                {
+                    result+=Query.value(i).toString().simplified()+",";
+                }
                 output->ExchangeData->append(result);
             }
             return true;
@@ -968,9 +704,11 @@ bool listmajor::outputdata(shared_ptr<queryexchange> output)
             output->Type="UDEMajor";
             while(Query.next())
             {
-                QString result=Query.value(0).toString().simplified()+",";
-                result+=Query.value(1).toString().simplified()+",";
-                result+=Query.value(2).toString().simplified();
+                QString result;
+                for(int i=0;i<3;i++)
+                {
+                    result+=Query.value(i).toString().simplified()+",";
+                }
                 output->ExchangeData->append(result);
             }
             return true;
@@ -979,27 +717,6 @@ bool listmajor::outputdata(shared_ptr<queryexchange> output)
     }
 }
 
-void listmajor::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool listmajor::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool listmajoruid::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1053,27 +770,6 @@ bool listmajoruid::outputdata(shared_ptr<queryexchange> output)
     return false;
 }
 
-void listmajoruid::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool listmajoruid::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool insertmajor::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1090,6 +786,15 @@ bool insertmajor::inputdata(shared_ptr<queryexchange> input)
             wcout<<"Wrong Parameter"<<endl;
             return false;
         }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
         QString name=input->ExchangeData->at(1);
         QString supervisor=input->ExchangeData->at(2);
         Query.prepare("INSERT INTO [dbo].[MajorinUDE]([MajorName],[Supervisor])VALUES(:name,:supervisor)");
@@ -1104,6 +809,15 @@ bool insertmajor::inputdata(shared_ptr<queryexchange> input)
             qDebug()<<"Wrong Parameter";
             wcout<<"Wrong Parameter"<<endl;
             return false;
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         QString name=input->ExchangeData->at(1);
         QString supervisor=input->ExchangeData->at(2);
@@ -1122,27 +836,7 @@ bool insertmajor::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void insertmajor::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
 
-bool insertmajor::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool deletemajor::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1178,27 +872,7 @@ bool deletemajor::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void deletemajor::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
 
-bool deletemajor::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool updatemajor::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1214,6 +888,15 @@ bool updatemajor::inputdata(shared_ptr<queryexchange> input)
             qDebug()<<"Wrong Parameter";
             wcout<<"Wrong Parameter"<<endl;
             return false;
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         QString UID=input->ExchangeData->at(1);
         QString name=input->ExchangeData->at(2);
@@ -1231,6 +914,15 @@ bool updatemajor::inputdata(shared_ptr<queryexchange> input)
             qDebug()<<"Wrong Parameter";
             wcout<<"Wrong Parameter"<<endl;
             return false;
+        }
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
         }
         QString UID=input->ExchangeData->at(1);
         QString name=input->ExchangeData->at(2);
@@ -1251,27 +943,6 @@ bool updatemajor::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void updatemajor::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool updatemajor::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool listLectureSelect::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1284,6 +955,15 @@ bool listLectureSelect::inputdata(shared_ptr<queryexchange> input)
         qDebug()<<"Wrong Parameter";
         wcout<<"Wrong Parameter"<<endl;
         return false;
+    }
+    for(int i=0;i<input->ExchangeData->size();++i)
+    {
+        if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+        {
+            cout<<"Illegal character detected!"<<endl;
+            qDebug()<<"Illegal character detected!";
+            return false;
+        }
     }
     if(input->ExchangeData->at(0)=="UDE")
     {
@@ -1333,27 +1013,7 @@ bool listLectureSelect::outputdata(shared_ptr<queryexchange> output)
     return false;
 }
 
-void listLectureSelect::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
 
-bool listLectureSelect::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool insertlectureselect::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1363,6 +1023,15 @@ bool insertlectureselect::inputdata(shared_ptr<queryexchange> input)
     }
     if(input->ExchangeData->at(0)=="UDE")
     {
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
         QString Major=input->ExchangeData->at(1);
         QString Lecture=input->ExchangeData->at(2);
         Query.prepare("INSERT INTO [dbo].[UDELectureSelect] ([MajorUUID],[LectureUUID]) VALUES (:major,:lecture)");
@@ -1372,6 +1041,15 @@ bool insertlectureselect::inputdata(shared_ptr<queryexchange> input)
     }
     if(input->ExchangeData->at(0)=="ZZU")
     {
+        for(int i=0;i<input->ExchangeData->size();++i)
+        {
+            if(!(insertSecurityCheck(input->ExchangeData->at(i))))
+            {
+                cout<<"Illegal character detected!"<<endl;
+                qDebug()<<"Illegal character detected!";
+                return false;
+            }
+        }
         QString Major=input->ExchangeData->at(1);
         QString Lecture=input->ExchangeData->at(2);
         Query.prepare("INSERT INTO [dbo].[ZZULectureSelect] ([MajorUUID],[LectureUUID]) VALUES (:major,:lecture)");
@@ -1387,27 +1065,6 @@ bool insertlectureselect::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void insertlectureselect::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool insertlectureselect::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool deletelectureselect::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1441,27 +1098,6 @@ bool deletelectureselect::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void deletelectureselect::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool deletelectureselect::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool liststudent::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1480,43 +1116,17 @@ bool liststudent::outputdata(shared_ptr<queryexchange> output)
 {
     while(Query.next())
     {
-        QString result=Query.value(0).toString().simplified()+",";
-        result+=Query.value(1).toString().simplified()+",";
-        result+=Query.value(2).toString().simplified()+",";
-        result+=Query.value(3).toString().simplified()+",";
-        result+=Query.value(4).toString().simplified()+",";
-        result+=Query.value(5).toString().simplified()+",";
-        result+=Query.value(6).toString().simplified()+",";
-        result+=Query.value(7).toString().simplified()+",";
-        result+=Query.value(8).toString().simplified()+",";
-        result+=Query.value(9).toString().simplified()+",";
-        result+=Query.value(10).toString().simplified();
+        QString result;
+        for(int i=0;i<11;i++)
+        {
+            result+=Query.value(i).toString().simplified()+",";
+        }
         output->ExchangeData->append(result);
     }
     return true;
 }
 
-void liststudent::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
 
-bool liststudent::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool insertstudent::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1569,27 +1179,6 @@ bool insertstudent::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void insertstudent::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool insertstudent::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool deletestudent::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1611,27 +1200,6 @@ bool deletestudent::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void deletestudent::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool deletestudent::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool updatestudent::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1686,27 +1254,7 @@ bool updatestudent::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void updatestudent::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
 
-bool updatestudent::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool listexam::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1795,27 +1343,6 @@ bool listexam::outputdata(shared_ptr<queryexchange> output)
     return false;
 }
 
-void listexam::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool listexam::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool insertexam::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1907,27 +1434,6 @@ bool insertexam::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void insertexam::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool insertexam::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool deleteexam::inputdata(shared_ptr<queryexchange> input)
 {
@@ -1967,27 +1473,6 @@ bool deleteexam::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void deleteexam::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
-
-bool deleteexam::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}
 
 bool updateexam::inputdata(shared_ptr<queryexchange> input)
 {
@@ -2082,24 +1567,4 @@ bool updateexam::outputdata(shared_ptr<queryexchange> output)
     return true;
 }
 
-void updateexam::setdb(QSqlDatabase setdb)
-{
-    db=setdb;
-}
 
-bool updateexam::exec()
-{
-    MyProdlg dlg;
-    //change to multi thread method
-    auto m_thread=new thdSQLExec();
-    m_thread->setDatebase(&db);
-    m_thread->setquery(&Query);
-    m_thread->start();
-    //m_thread->wait();
-    while(!m_thread->isFinished())
-    {
-        qApp->processEvents();
-    }
-    dlg.close();
-    return m_thread->getresult();
-}

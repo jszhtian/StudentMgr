@@ -113,6 +113,7 @@ void MajorEditor::GetUIDMap()
         auto outputlistZZU=new QStringList;
         outputZZU->ExchangeData=outputlistZZU;
         listUIDZZU->outputdata(outputZZU);
+        #pragma omp parallel for
         for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
         {
             QString tmp=outputZZU->ExchangeData->at(itr);
@@ -146,6 +147,7 @@ void MajorEditor::GetUIDMap()
         auto outputlistUDE=new QStringList;
         outputUDE->ExchangeData=outputlistUDE;
         listUIDUDE->outputdata(outputUDE);
+        #pragma omp parallel for
         for(int itr=0;itr<outputUDE->ExchangeData->size();++itr)
         {
             QString tmp=outputUDE->ExchangeData->at(itr);
@@ -187,6 +189,7 @@ void MajorEditor::GetLectureUIDMap()
         auto outputlistZZU=new QStringList;
         outputZZU->ExchangeData=outputlistZZU;
         listUIDZZU->outputdata(outputZZU);
+        #pragma omp parallel for
         for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
         {
             QString tmp=outputZZU->ExchangeData->at(itr);
@@ -220,6 +223,7 @@ void MajorEditor::GetLectureUIDMap()
         auto outputlistUDE=new QStringList;
         outputUDE->ExchangeData=outputlistUDE;
         listUIDUDE->outputdata(outputUDE);
+        #pragma omp parallel for
         for(int itr=0;itr<outputUDE->ExchangeData->size();++itr)
         {
             QString tmp=outputUDE->ExchangeData->at(itr);
@@ -251,6 +255,7 @@ void MajorEditor::fillthemodel(QStringList *list)
     InitViewModel();
     if(Unisel=="University ZhengZhou")
     {
+        #pragma omp parallel for
         for(int itr=0;itr<list->size();++itr)
         {
             QString tmp=list->at(itr);
@@ -287,6 +292,7 @@ void MajorEditor::fillthemodel(QStringList *list)
     }
     if(Unisel=="University Duisburg-Essen")
     {
+        #pragma omp parallel for
         for(int itr=0;itr<list->size();++itr)
         {
             QString tmp=list->at(itr);
@@ -588,6 +594,7 @@ void MajorEditor::on_loadLectureButton_clicked()
             auto outputlist=new QStringList;
             output->ExchangeData=outputlist;
             list->outputdata(output);
+            #pragma omp parallel for
             for(int i=0;i<output->ExchangeData->size();++i)
             {
                 ui->LectureList->addItem(output->ExchangeData->at(i));

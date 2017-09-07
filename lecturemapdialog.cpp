@@ -129,62 +129,64 @@ void LectureMapDialog::on_RefreshButton_clicked()
     if(Uni=="UDE")
     {
         SQLFactory factory;
-               auto listlecturemap=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlecturemap"));
-               auto input=shared_ptr<queryexchange>(new queryexchange);
-               auto inputlist=new QStringList;
-               input->Type="ListLectureMap";
-               inputlist->append("UDE");
-               inputlist->append(lectUID);
-               input->ExchangeData=inputlist;
-               listlecturemap->inputdata(input);
-               listlecturemap->setdb(db->getdb());
-               auto res=listlecturemap->exec();
-               if (res)
-               {
-                   auto output=shared_ptr<queryexchange>(new queryexchange);
-                   auto outputlist=new QStringList;
-                   output->ExchangeData=outputlist;
-                   listlecturemap->outputdata(output);
-                   int capsize=output->ExchangeData->size();
-                   for(int i=0;i<capsize;i++)
-                   {
-                       ui->maplist->addItem(output->ExchangeData->at(i));
-                   }
-               }
-               else
-               {
-                   QMessageBox::critical(NULL,"Error","SQL command execute failed!");
-               }
+        auto listlecturemap=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlecturemap"));
+        auto input=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlist=new QStringList;
+        input->Type="ListLectureMap";
+        inputlist->append("UDE");
+        inputlist->append(lectUID);
+        input->ExchangeData=inputlist;
+        listlecturemap->inputdata(input);
+        listlecturemap->setdb(db->getdb());
+        auto res=listlecturemap->exec();
+        if (res)
+        {
+            auto output=shared_ptr<queryexchange>(new queryexchange);
+            auto outputlist=new QStringList;
+            output->ExchangeData=outputlist;
+            listlecturemap->outputdata(output);
+            int capsize=output->ExchangeData->size();
+#pragma omp parallel for
+            for(int i=0;i<capsize;i++)
+            {
+                ui->maplist->addItem(output->ExchangeData->at(i));
+            }
+        }
+        else
+        {
+            QMessageBox::critical(NULL,"Error","SQL command execute failed!");
+        }
     }
     if(Uni=="ZZU")
     {
         SQLFactory factory;
-                auto listlecturemap=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlecturemap"));
-                auto input=shared_ptr<queryexchange>(new queryexchange);
-                auto inputlist=new QStringList;
-                input->Type="ListLectureMap";
-                inputlist->append("ZZU");
-                inputlist->append(lectUID);
-                input->ExchangeData=inputlist;
-                listlecturemap->inputdata(input);
-                listlecturemap->setdb(db->getdb());
-                auto res=listlecturemap->exec();
-                if (res)
-                {
-                    auto output=shared_ptr<queryexchange>(new queryexchange);
-                    auto outputlist=new QStringList;
-                    output->ExchangeData=outputlist;
-                    listlecturemap->outputdata(output);
-                    int capsize=output->ExchangeData->size();
-                    for(int i=0;i<capsize;i++)
-                    {
-                        ui->maplist->addItem(output->ExchangeData->at(i));
-                    }
-                }
-                else
-                {
-                    QMessageBox::critical(NULL,"Error","SQL command execute failed!");
-                }
+        auto listlecturemap=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlecturemap"));
+        auto input=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlist=new QStringList;
+        input->Type="ListLectureMap";
+        inputlist->append("ZZU");
+        inputlist->append(lectUID);
+        input->ExchangeData=inputlist;
+        listlecturemap->inputdata(input);
+        listlecturemap->setdb(db->getdb());
+        auto res=listlecturemap->exec();
+        if (res)
+        {
+            auto output=shared_ptr<queryexchange>(new queryexchange);
+            auto outputlist=new QStringList;
+            output->ExchangeData=outputlist;
+            listlecturemap->outputdata(output);
+            int capsize=output->ExchangeData->size();
+#pragma omp parallel for
+            for(int i=0;i<capsize;i++)
+            {
+                ui->maplist->addItem(output->ExchangeData->at(i));
+            }
+        }
+        else
+        {
+            QMessageBox::critical(NULL,"Error","SQL command execute failed!");
+        }
     }
     QString tarUni;
     if(Uni=="UDE")tarUni="ZZU";
@@ -192,80 +194,82 @@ void LectureMapDialog::on_RefreshButton_clicked()
     lectureMap.clear();
     if(tarUni=="ZZU")
     {
-            SQLFactory factory;
-            auto listUIDZZU=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlectureuid"));
-            auto inputZZU=shared_ptr<queryexchange>(new queryexchange);
-            auto inputlistZZU=new QStringList;
-            inputZZU->Type="listlectureuid";
-            inputlistZZU->append("ZZU");
-            inputZZU->ExchangeData=inputlistZZU;
-            listUIDZZU->inputdata(inputZZU);
-            listUIDZZU->setdb(db->getdb());
-            auto res=listUIDZZU->exec();
-            if (res)
+        SQLFactory factory;
+        auto listUIDZZU=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlectureuid"));
+        auto inputZZU=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlistZZU=new QStringList;
+        inputZZU->Type="listlectureuid";
+        inputlistZZU->append("ZZU");
+        inputZZU->ExchangeData=inputlistZZU;
+        listUIDZZU->inputdata(inputZZU);
+        listUIDZZU->setdb(db->getdb());
+        auto res=listUIDZZU->exec();
+        if (res)
+        {
+            auto outputZZU=shared_ptr<queryexchange>(new queryexchange);
+            auto outputlistZZU=new QStringList;
+            outputZZU->ExchangeData=outputlistZZU;
+            listUIDZZU->outputdata(outputZZU);
+            #pragma omp parallel for
+            for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
             {
-                auto outputZZU=shared_ptr<queryexchange>(new queryexchange);
-                auto outputlistZZU=new QStringList;
-                outputZZU->ExchangeData=outputlistZZU;
-                listUIDZZU->outputdata(outputZZU);
-                for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
+                QString tmp=outputZZU->ExchangeData->at(itr);
+                istringstream sin(tmp.toStdString());
+                QStringList attrs;
+                QString UID;
+                QString LectName;
+                string attr;
+                while(getline(sin,attr,','))
                 {
-                    QString tmp=outputZZU->ExchangeData->at(itr);
-                    istringstream sin(tmp.toStdString());
-                    QStringList attrs;
-                    QString UID;
-                    QString LectName;
-                    string attr;
-                    while(getline(sin,attr,','))
-                    {
-                        attrs.append(QString::fromStdString(attr));
-                    }
-                    UID=attrs.at(0);
-                    LectName=attrs.at(1);
-                    lectureMap.insert(pair<string,string>(LectName.toStdString(),UID.toStdString()));
+                    attrs.append(QString::fromStdString(attr));
                 }
+                UID=attrs.at(0);
+                LectName=attrs.at(1);
+                lectureMap.insert(pair<string,string>(LectName.toStdString(),UID.toStdString()));
             }
+        }
     }
     if(tarUni=="UDE")
     {
-            SQLFactory factory;
-            auto listUIDUDE=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlectureuid"));
-            auto inputUDE=shared_ptr<queryexchange>(new queryexchange);
-            auto inputlistUDE=new QStringList;
-            inputUDE->Type="listlectureuid";
-            inputlistUDE->append("UDE");
-            inputUDE->ExchangeData=inputlistUDE;
-            listUIDUDE->inputdata(inputUDE);
-            listUIDUDE->setdb(db->getdb());
-            auto res2=listUIDUDE->exec();
-            if (res2)
+        SQLFactory factory;
+        auto listUIDUDE=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlectureuid"));
+        auto inputUDE=shared_ptr<queryexchange>(new queryexchange);
+        auto inputlistUDE=new QStringList;
+        inputUDE->Type="listlectureuid";
+        inputlistUDE->append("UDE");
+        inputUDE->ExchangeData=inputlistUDE;
+        listUIDUDE->inputdata(inputUDE);
+        listUIDUDE->setdb(db->getdb());
+        auto res2=listUIDUDE->exec();
+        if (res2)
+        {
+            auto outputUDE=shared_ptr<queryexchange>(new queryexchange);
+            auto outputlistUDE=new QStringList;
+            outputUDE->ExchangeData=outputlistUDE;
+            listUIDUDE->outputdata(outputUDE);
+            #pragma omp parallel for
+            for(int itr=0;itr<outputUDE->ExchangeData->size();++itr)
             {
-                auto outputUDE=shared_ptr<queryexchange>(new queryexchange);
-                auto outputlistUDE=new QStringList;
-                outputUDE->ExchangeData=outputlistUDE;
-                listUIDUDE->outputdata(outputUDE);
-                for(int itr=0;itr<outputUDE->ExchangeData->size();++itr)
+                QString tmp=outputUDE->ExchangeData->at(itr);
+                istringstream sin(tmp.toStdString());
+                QStringList attrs;
+                QString UID;
+                QString LectName;
+                string attr;
+                while(getline(sin,attr,','))
                 {
-                    QString tmp=outputUDE->ExchangeData->at(itr);
-                    istringstream sin(tmp.toStdString());
-                    QStringList attrs;
-                    QString UID;
-                    QString LectName;
-                    string attr;
-                    while(getline(sin,attr,','))
-                    {
-                        attrs.append(QString::fromStdString(attr));
-                    }
-                    if(attrs.size()!=2)
-                    {
-                        wcout<<"updateLectureUIDmap:Not match number of parameters!";
-                        qDebug()<<"updateLectureUIDmap:Not match number of parameters!";
-                    }
-                    UID=attrs.at(0);
-                    LectName=attrs.at(1);
-                    lectureMap.insert(pair<string,string>(LectName.toStdString(),UID.toStdString()));
+                    attrs.append(QString::fromStdString(attr));
                 }
+                if(attrs.size()!=2)
+                {
+                    wcout<<"updateLectureUIDmap:Not match number of parameters!";
+                    qDebug()<<"updateLectureUIDmap:Not match number of parameters!";
+                }
+                UID=attrs.at(0);
+                LectName=attrs.at(1);
+                lectureMap.insert(pair<string,string>(LectName.toStdString(),UID.toStdString()));
             }
+        }
     }
 
 }

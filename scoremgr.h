@@ -46,6 +46,8 @@ private slots:
 
     void on_ExportButton_clicked();
 
+    void slot_sortbyColumn(int);
+
 private:
     void getlist();
     bool usecurrenttime=false;

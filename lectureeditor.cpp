@@ -68,6 +68,7 @@ void LectureEditor::InitViewModel()
 void LectureEditor::fillthemodel(QStringList *list)
 {
     InitViewModel();
+    #pragma omp parallel for
     for(int itr=0;itr<list->size();++itr)
     {
         QString tmp=list->at(itr);
@@ -79,18 +80,11 @@ void LectureEditor::fillthemodel(QStringList *list)
             attrs.append(QString::fromStdString(attr));
         }
         QList<QStandardItem*> newRow;
-        auto Row0=new QStandardItem(attrs.at(0));
-        auto Row1=new QStandardItem(attrs.at(1));
-        auto Row2=new QStandardItem(attrs.at(2));
-        auto Row3=new QStandardItem(attrs.at(3));
-        auto Row4=new QStandardItem(attrs.at(4));
-        auto Row5=new QStandardItem(attrs.at(5));
-        newRow.append(Row0);
-        newRow.append(Row1);
-        newRow.append(Row2);
-        newRow.append(Row3);
-        newRow.append(Row4);
-        newRow.append(Row5);
+        for(int i=0;i<attrs.size();++i)
+        {
+            newRow.append(new QStandardItem(attrs.at(i)));
+        }
+
         TableModel->appendRow(newRow);
     }
     ui->LectureView->setColumnHidden(0,true);
@@ -108,18 +102,16 @@ void LectureEditor::GetList()
     auto listlecture=shared_ptr<SQLCommandBase>(factory.CreateSQLCommand("listlecture"));
     auto input=shared_ptr<queryexchange>(new queryexchange);
     auto inputlist=new QStringList;
+    input->Type="ListLecture";
     if(UniSel=="University Duisburg-Essen")
     {
-        input->Type="ListLecture";
         inputlist->append("UDE");
-        input->ExchangeData=inputlist;
     }
     if(UniSel=="University ZhengZhou")
     {
-        input->Type="ListLecture";
         inputlist->append("ZZU");
-        input->ExchangeData=inputlist;
     }
+    input->ExchangeData=inputlist;
     listlecture->inputdata(input);
     listlecture->setdb(db->getdb());
     auto res=listlecture->exec();
@@ -143,14 +135,13 @@ void LectureEditor::on_UniSelect_activated(const QString &arg1)
     {
         ui->Typebox->setEnabled(true);
         ui->SemesterEditor->setEnabled(false);
-        GetList();
     }
     if(arg1=="University Duisburg-Essen")
     {
         ui->Typebox->setEnabled(false);
         ui->SemesterEditor->setEnabled(true);
-        GetList();
     }
+    GetList();
 }
 
 
@@ -167,6 +158,7 @@ void LectureEditor::on_ReFButton_clicked()
         if(opera=="==")
         {
             int rows=TableModel->rowCount();
+            #pragma omp parallel for
             for(int i=0;i<rows;i++)
             {
                 QString name=TableModel->item(i,1)->text();
@@ -179,6 +171,7 @@ void LectureEditor::on_ReFButton_clicked()
         if(opera=="LIKE")
         {
             int rows=TableModel->rowCount();
+            #pragma omp parallel for
             for(int i=0;i<rows;i++)
             {
                 QString name=TableModel->item(i,1)->text();
@@ -437,6 +430,7 @@ void LectureEditor::on_ExportButton_clicked()
         {
             out<<"LectureName,Type,Module,Credit,Teachinghours\n";
         }
+        #pragma omp parallel for
         for(int i=0;i<TableModel->rowCount();++i)
         {
             for(int j=1;j<TableModel->columnCount();j++)

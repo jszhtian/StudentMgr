@@ -7,6 +7,8 @@
 QT       += core gui
 QT       += sql
 CONFIG   += c++14
+QMAKE_CXXFLAGS += -openmp
+QMAKE_LFLAGS += -openmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -76,6 +78,3 @@ FORMS += \
     scoremgr.ui \
     studentselectdialog.ui
 
-#win32:CONFIG += console
-#for debug output!
-#remove it when use release mode
