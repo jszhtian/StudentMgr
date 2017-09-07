@@ -7,8 +7,8 @@
 QT       += core gui
 QT       += sql
 CONFIG   += c++14
-QMAKE_CXXFLAGS += -openmp
-QMAKE_LFLAGS += -openmp
+#QMAKE_CXXFLAGS+= -fopenmp
+#QMAKE_LFLAGS +=  -fopenmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

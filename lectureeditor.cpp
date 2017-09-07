@@ -68,7 +68,7 @@ void LectureEditor::InitViewModel()
 void LectureEditor::fillthemodel(QStringList *list)
 {
     InitViewModel();
-    #pragma omp parallel for
+    
     for(int itr=0;itr<list->size();++itr)
     {
         QString tmp=list->at(itr);
@@ -158,7 +158,7 @@ void LectureEditor::on_ReFButton_clicked()
         if(opera=="==")
         {
             int rows=TableModel->rowCount();
-            #pragma omp parallel for
+            
             for(int i=0;i<rows;i++)
             {
                 QString name=TableModel->item(i,1)->text();
@@ -171,7 +171,7 @@ void LectureEditor::on_ReFButton_clicked()
         if(opera=="LIKE")
         {
             int rows=TableModel->rowCount();
-            #pragma omp parallel for
+            
             for(int i=0;i<rows;i++)
             {
                 QString name=TableModel->item(i,1)->text();
@@ -430,7 +430,7 @@ void LectureEditor::on_ExportButton_clicked()
         {
             out<<"LectureName,Type,Module,Credit,Teachinghours\n";
         }
-        #pragma omp parallel for
+        
         for(int i=0;i<TableModel->rowCount();++i)
         {
             for(int j=1;j<TableModel->columnCount();j++)

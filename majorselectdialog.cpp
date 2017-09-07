@@ -73,7 +73,7 @@ void MajorSelectDialog::on_REFButton_clicked()
             auto outputlistZZU=new QStringList;
             outputZZU->ExchangeData=outputlistZZU;
             listUIDZZU->outputdata(outputZZU);
-            #pragma omp parallel for
+            
             for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
             {
                 QString tmp=outputZZU->ExchangeData->at(itr);
@@ -112,7 +112,7 @@ void MajorSelectDialog::on_REFButton_clicked()
             auto outputlistUDE=new QStringList;
             outputUDE->ExchangeData=outputlistUDE;
             listUIDUDE->outputdata(outputUDE);
-            #pragma omp parallel for
+            
             for(int itr=0;itr<outputUDE->ExchangeData->size();++itr)
             {
                 QString tmp=outputUDE->ExchangeData->at(itr);

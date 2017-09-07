@@ -61,7 +61,7 @@ void StudentEditor::getMajorMap()
         auto outputlistZZU=new QStringList;
         outputZZU->ExchangeData=outputlistZZU;
         listUIDZZU->outputdata(outputZZU);
-        #pragma omp parallel for
+        
         for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
         {
             QString tmp=outputZZU->ExchangeData->at(itr);
@@ -84,7 +84,7 @@ void StudentEditor::getMajorMap()
 void StudentEditor::fillmodel(QStringList* List)
 {
     InitViewModel();
-    #pragma omp parallel for
+    
     for(int itr=0;itr<List->size();++itr)
     {
         QString tmp=List->at(itr);
@@ -332,7 +332,7 @@ void StudentEditor::on_ExportButton_clicked()
         QTextStream out(&csvfile);
         out.setCodec("UTF-8");
         out<<"StudentID,Name,Birthday,IDNumber,Class,Gender,Grade,StudO,MajorinZZU,MajorinUDE\n";
-#pragma omp parallel for
+
         for(int i=0;i<TableModel->rowCount();++i)
         {
             for(int j=1;j<TableModel->columnCount();j++)

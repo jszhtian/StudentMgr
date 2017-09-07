@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include <QApplication>
 #include <iostream>
+#include "common.h"
 #include <windows.h>
 bool debugflag=true;
 int main(int argc, char *argv[])
@@ -12,11 +13,14 @@ int main(int argc, char *argv[])
     {
         //open console
         if(AllocConsole())
-         {
+        {
             //Redirection stdout
-          freopen("CONOUT$","w",stdout);
-         }
+            freopen("CONOUT$","w",stdout);
+
+        }
     }
+    //test for OpenMP
+
     MainWindow w;
     w.show();
 

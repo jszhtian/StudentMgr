@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 #include <exception>
-#include <omp.h>
+
 using namespace std;
 
 #include <QDebug>

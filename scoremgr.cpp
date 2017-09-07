@@ -115,7 +115,7 @@ void ScoreMgr::getMap()
         auto outputlist=new QStringList;
         output->ExchangeData=outputlist;
         liststudent->outputdata(output);
-#pragma omp parallel for
+
         for(int itr=0;itr<output->ExchangeData->size();++itr)
         {
             QString tmp=output->ExchangeData->at(itr);
@@ -149,7 +149,7 @@ void ScoreMgr::getMap()
             auto outputlistUDE=new QStringList;
             outputUDE->ExchangeData=outputlistUDE;
             listUIDUDE->outputdata(outputUDE);
-            #pragma omp parallel for
+            
             for(int itr=0;itr<outputUDE->ExchangeData->size();++itr)
             {
                 QString tmp=outputUDE->ExchangeData->at(itr);
@@ -191,7 +191,7 @@ void ScoreMgr::getMap()
             auto outputlistZZU=new QStringList;
             outputZZU->ExchangeData=outputlistZZU;
             listUIDZZU->outputdata(outputZZU);
-            #pragma omp parallel for
+            
             for(int itr=0;itr<outputZZU->ExchangeData->size();++itr)
             {
                 QString tmp=outputZZU->ExchangeData->at(itr);
@@ -219,7 +219,7 @@ void ScoreMgr::fillmodel(QStringList *list)
     QString mode=ui->ExamTypeBox->currentText();
     if(mode=="SelectionExam")
     {
-        #pragma omp parallel for
+        
         for(int itr=0;itr<list->size();++itr)
         {
             QString tmp=list->at(itr);
@@ -248,7 +248,7 @@ void ScoreMgr::fillmodel(QStringList *list)
     }
     if(mode=="UDEExam")
     {
-        #pragma omp parallel for
+        
         for(int itr=0;itr<list->size();++itr)
         {
             QString tmp=list->at(itr);
@@ -281,7 +281,7 @@ void ScoreMgr::fillmodel(QStringList *list)
     }
     if(mode=="ZZUExam")
     {
-        #pragma omp parallel for
+        
         for(int itr=0;itr<list->size();++itr)
         {
             QString tmp=list->at(itr);
@@ -764,7 +764,7 @@ void ScoreMgr::on_ExportButton_clicked()
         {
             out<<"StudentName,StudentID,LectureName,LectureinUDE,LectureType,Examscore,Examsnote,Semester,Examdatastamp\n";
         }
-        #pragma omp parallel for
+        
         for(int i=0;i<TableModel->rowCount();++i)
         {
             for(int j=1;j<TableModel->columnCount();j++)

@@ -84,7 +84,7 @@ void StudentSelectDialog::prepare()
         auto outputlist=new QStringList;
         output->ExchangeData=outputlist;
         liststudent->outputdata(output);
-#pragma omp parallel for
+
         for(int itr=0;itr<output->ExchangeData->size();++itr)
         {
             QString tmp=output->ExchangeData->at(itr);
@@ -125,7 +125,7 @@ void StudentSelectDialog::initDB(shared_ptr<SQLBase> setdb)
 void StudentSelectDialog::on_FindButton_clicked()
 {
     int rows=TableModel->rowCount();
-    #pragma omp parallel for
+    
     for(int i=0;i<rows;i++)
     {
         ui->tableView->showRow(i);
@@ -136,7 +136,7 @@ void StudentSelectDialog::on_FindButton_clicked()
     {
         if(type=="Name")
         {
-            #pragma omp parallel for
+            
             for(int i=0;i<rows;i++)
             {
                 QString name=TableModel->item(i,2)->text();
@@ -148,7 +148,7 @@ void StudentSelectDialog::on_FindButton_clicked()
         }
         if(type=="StudentID")
         {
-            #pragma omp parallel for
+            
             for(int i=0;i<rows;i++)
             {
                 QString stdID=TableModel->item(i,1)->text();
