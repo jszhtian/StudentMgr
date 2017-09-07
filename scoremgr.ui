@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ScoreMgr</class>
+ <widget class="QMainWindow" name="ScoreMgr">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Type:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="ExamTypeBox">
+        <item>
+         <property name="text">
+          <string>SelectionExam</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>UDEExam</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>ZZUExam</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>Condition:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>FilterType:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="FiltertypeBox">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>StudentID</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LectureName</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Score</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Note</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Operation:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="OperationBox">
+        <item>
+         <property name="text">
+          <string>==</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>LIKE</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>&gt;</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>&gt;=</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>&lt;</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>&lt;=</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QLineEdit" name="ConditionEdit"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="2" column="4">
+       <widget class="QLineEdit" name="NoteEdit"/>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLineEdit" name="ZZUnameEdit"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>StudentID:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>ZZU LectureName:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="deleteButton">
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Score:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Note:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="IDEdit"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="ExportButton">
+        <property name="text">
+         <string>Export</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="ScoreEdit"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLineEdit" name="NameEdit"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="InsertButton">
+        <property name="text">
+         <string>Insert</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLineEdit" name="UDENameEdit"/>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>UDE LectureName:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>ExamType:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="TypeEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="UPDButton">
+        <property name="text">
+         <string>Update</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>TimeStamp:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4">
+       <widget class="QDateTimeEdit" name="timestampEdit"/>
+      </item>
+      <item row="4" column="1">
+       <widget class="QPushButton" name="SelLectureButton">
+        <property name="text">
+         <string>LectureSelect</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QCheckBox" name="TimeCheckBox">
+        <property name="text">
+         <string>Use CurrentTime</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTableView" name="tableView"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
