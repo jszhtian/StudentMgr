@@ -287,7 +287,7 @@ void LectureEditor::on_ReFButton_clicked()
                 }
             }
         }
-        if(type="Teachinghours")
+        if(type=="Teachinghours")
         {
             if(opera=="==")
             {
