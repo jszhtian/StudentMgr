@@ -9,6 +9,8 @@ ScoreMgr::ScoreMgr(QWidget *parent) :
     ui->setupUi(this);
 
     QString mode=ui->ExamTypeBox->currentText();
+    QDateTime time=QDateTime::currentDateTime();
+    ui->dateTimeEdit->setDateTime(time);
     if(mode=="SelectionExam")
     {
         ui->ZZUEdit->setEnabled(false);
@@ -478,6 +480,570 @@ void ScoreMgr::on_RefButton_clicked()
 {
     getlist();
     getMap();
+    QString opera=ui->OperationBox->currentText();
+    QString type=ui->FilterBox->currentText();
+    QString cond=ui->conditonEdit->text();
+    QString mode=ui->ExamTypeBox->currentText();
+    if(type=="Name")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,1)->text();
+                if(name!=cond)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,1)->text();
+                if(!name.contains(cond))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
+    if(type=="StudentID")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,2)->text();
+                if(name!=cond)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,2)->text();
+                if(!name.contains(cond))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
+
+
+    if(mode=="SelectionExam")
+    {
+        if(type=="Score")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,3)->text();
+                    if(name!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,3)->text().toInt();
+                    if(cond.toInt()>=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,3)->text().toInt();
+                    if(cond.toInt()>value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,3)->text().toInt();
+                    if(cond.toInt()<value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,3)->text().toInt();
+                    if(cond.toInt()<=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Type")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,4)->text();
+                    if(name!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="LIKE")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,4)->text();
+                    if(!name.contains(cond))
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+    }
+    if(mode=="UDEExam")
+    {
+        if(type=="LectureName")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString value=TableModel->item(i,3)->text();
+                    if(value!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="LIKE")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString value=TableModel->item(i,3)->text();
+                    if(!value.contains(cond))
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Semester")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString value=TableModel->item(i,6)->text();
+                    if(value!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Note")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,5)->text();
+                    if(name!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,5)->text().toInt();
+                    if(cond.toInt()>=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,5)->text().toInt();
+                    if(cond.toInt()>value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,5)->text().toInt();
+                    if(cond.toInt()<value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,5)->text().toInt();
+                    if(cond.toInt()<=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Score")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,4)->text();
+                    if(name!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,4)->text().toInt();
+                    if(cond.toInt()>=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,4)->text().toInt();
+                    if(cond.toInt()>value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,4)->text().toInt();
+                    if(cond.toInt()<value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,4)->text().toInt();
+                    if(cond.toInt()<=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+    }
+    if(mode=="ZZUExam")
+    {
+        if(type=="LectureName")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString value=TableModel->item(i,3)->text();
+                    if(value!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="LIKE")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString value=TableModel->item(i,3)->text();
+                    if(!value.contains(cond))
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Semester")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString value=TableModel->item(i,8)->text();
+                    if(value!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Note")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString value=TableModel->item(i,7)->text();
+                    if(value!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    float value=TableModel->item(i,7)->text().toFloat();
+                    if(cond.toFloat()>=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    float value=TableModel->item(i,7)->text().toFloat();
+                    if(cond.toFloat()>value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    float value=TableModel->item(i,7)->text().toFloat();
+                    if(cond.toFloat()<value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    float value=TableModel->item(i,7)->text().toFloat();
+                    if(cond.toFloat()<=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Score")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,6)->text();
+                    if(name!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,6)->text().toInt();
+                    if(cond.toInt()>=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,6)->text().toInt();
+                    if(cond.toInt()>value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,6)->text().toInt();
+                    if(cond.toInt()<value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    int value=TableModel->item(i,6)->text().toInt();
+                    if(cond.toInt()<=value)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Type")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,5)->text();
+                    if(name!=cond)
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="LIKE")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,5)->text();
+                    if(!name.contains(cond))
+                    {
+                        ui->tableView->hideRow(i);
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 void ScoreMgr::getlist()

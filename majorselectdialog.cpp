@@ -55,6 +55,7 @@ void MajorSelectDialog::initDB(shared_ptr<SQLBase> setdb)
 void MajorSelectDialog::on_REFButton_clicked()
 {
     MajorMap.clear();
+    ui->MajorcomboBox->clear();
     if(Uni=="ZZU")
     {
         SQLFactory factory;
