@@ -153,35 +153,210 @@ void LectureEditor::on_ReFButton_clicked()
     auto opera=ui->OperationBox->currentText();
     auto condit=ui->conditionEditor->text();
     auto UniSel=ui->UniSelect->currentText();
-    if(type=="Name")
+    if(!condit.isEmpty())
     {
-        if(opera=="==")
+        if(type=="Name")
         {
-            int rows=TableModel->rowCount();
-            
-            for(int i=0;i<rows;i++)
+            if(opera=="==")
             {
-                QString name=TableModel->item(i,1)->text();
-                if(name!=condit)
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
                 {
-                    ui->LectureView->hideRow(i);
+                    QString name=TableModel->item(i,1)->text();
+                    if(name!=condit)
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="LIKE")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,1)->text();
+                    if(!name.contains(condit))
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
                 }
             }
         }
-        if(opera=="LIKE")
+
+        if(type=="Type")
         {
-            int rows=TableModel->rowCount();
-            
-            for(int i=0;i<rows;i++)
+            if(UniSel=="University ZhengZhou")
             {
-                QString name=TableModel->item(i,1)->text();
-                if(!name.contains(condit))
+                if(opera=="==")
                 {
-                    ui->LectureView->hideRow(i);
+                    int rows=TableModel->rowCount();
+
+                    for(int i=0;i<rows;i++)
+                    {
+                        QString name=TableModel->item(i,2)->text();
+                        if(name!=condit)
+                        {
+                            ui->LectureView->hideRow(i);
+                        }
+                    }
+                }
+                if(opera=="LIKE")
+                {
+                    int rows=TableModel->rowCount();
+
+                    for(int i=0;i<rows;i++)
+                    {
+                        QString name=TableModel->item(i,2)->text();
+                        if(!name.contains(condit))
+                        {
+                            ui->LectureView->hideRow(i);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        if(type=="Credit")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,4)->text();
+                    if(name!=condit)
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,4)->text().toDouble();
+                    if(Cre<=condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,4)->text().toDouble();
+                    if(Cre<condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,4)->text().toDouble();
+                    if(Cre>=condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,4)->text().toDouble();
+                    if(Cre>condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+        }
+        if(type=="Teachinghours")
+        {
+            if(opera=="==")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    QString name=TableModel->item(i,5)->text();
+                    if(name!=condit)
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,5)->text().toDouble();
+                    if(Cre<=condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera==">=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,5)->text().toDouble();
+                    if(Cre<condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,5)->text().toDouble();
+                    if(Cre>=condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
+                }
+            }
+            if(opera=="<=")
+            {
+                int rows=TableModel->rowCount();
+
+                for(int i=0;i<rows;i++)
+                {
+                    auto Cre=TableModel->item(i,5)->text().toDouble();
+                    if(Cre>condit.toDouble())
+                    {
+                        ui->LectureView->hideRow(i);
+                    }
                 }
             }
         }
     }
+<<<<<<< HEAD
     if(type=="Credit")
     {
         if(opera=="==")
@@ -333,6 +508,8 @@ void LectureEditor::on_ReFButton_clicked()
             }
         }
     }
+=======
+>>>>>>> 434fb42a03bc5f234bd71bd0bcb1ee359e814c98
 
 }
 
@@ -342,11 +519,11 @@ void LectureEditor::on_LectureView_clicked(const QModelIndex &index)
     if(UniSel=="University Duisburg-Essen")
     {
 
-       ui->NameEditor->setText(TableModel->item(index.row(),1)->text());
-       ui->Teachinghours->setText(TableModel->item(index.row(),5)->text());
-       ui->ModuleEditor->setText(TableModel->item(index.row(),3)->text());
-       ui->Credit->setText(TableModel->item(index.row(),4)->text());
-       ui->SemesterEditor->setText(TableModel->item(index.row(),2)->text());
+        ui->NameEditor->setText(TableModel->item(index.row(),1)->text());
+        ui->Teachinghours->setText(TableModel->item(index.row(),5)->text());
+        ui->ModuleEditor->setText(TableModel->item(index.row(),3)->text());
+        ui->Credit->setText(TableModel->item(index.row(),4)->text());
+        ui->SemesterEditor->setText(TableModel->item(index.row(),2)->text());
 
 
     }
