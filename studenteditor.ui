@@ -243,11 +243,6 @@
        </item>
        <item>
         <property name="text">
-         <string>Gender</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>StadO</string>
         </property>
        </item>

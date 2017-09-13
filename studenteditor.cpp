@@ -148,8 +148,191 @@ void StudentEditor::getList()
 
 void StudentEditor::on_REFButton_clicked()
 {
+    QString type=ui->FilterTypeBox->currentText();
+    QString opera=ui->OperationBox->currentText();
+    QString condit=ui->ConditionEdit->text();
     getList();
     getMajorMap();
+    if(type=="Name")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,2)->text();
+                if(name!=condit)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,2)->text();
+                if(!name.contains(condit))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
+    if(type=="StudentID")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,1)->text();
+                if(name!=condit)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,1)->text();
+                if(!name.contains(condit))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
+    if(type=="IDNumber")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,4)->text();
+                if(name!=condit)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,4)->text();
+                if(!name.contains(condit))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
+    if(type=="StadO")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,8)->text();
+                if(name!=condit)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,8)->text();
+                if(!name.contains(condit))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
+    if(type=="MajorinZZU")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,9)->text();
+                if(name!=condit)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,9)->text();
+                if(!name.contains(condit))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
+    if(type=="MajorinUDE")
+    {
+        if(opera=="==")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,10)->text();
+                if(name!=condit)
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+        if(opera=="LIKE")
+        {
+            int rows=TableModel->rowCount();
+
+            for(int i=0;i<rows;i++)
+            {
+                QString name=TableModel->item(i,10)->text();
+                if(!name.contains(condit))
+                {
+                    ui->tableView->hideRow(i);
+                }
+            }
+        }
+    }
+
 }
 
 void StudentEditor::on_tableView_clicked(const QModelIndex &index)

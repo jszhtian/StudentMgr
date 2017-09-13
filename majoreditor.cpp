@@ -636,7 +636,6 @@ void MajorEditor::on_AddLectureButton_clicked()
         }
         dlg->SetUni(Uni);
         dlg->initDB(db);
-        dlg->prepare();
         if(dlg->Rejected==dlg->exec())
         {
             QMessageBox::information(NULL,"Info","No Selection!");

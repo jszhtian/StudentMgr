@@ -250,6 +250,11 @@
          <string>Score</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Type</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
