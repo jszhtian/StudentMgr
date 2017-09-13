@@ -3,7 +3,7 @@ GO
 
 CREATE TABLE [Student](
 	[StudentUUID] [uniqueidentifier] NOT NULL Default(newsequentialid()),
-	[StudentID] [bigint] NOT NULL,
+	[StudentID] [bigint] NOT NULL UNIQUE,
 	[Name] [nvarchar](50) NOT NULL,
 	[Birthday] [date] NOT NULL,
 	[IDNumber] [bigint] NOT NULL,
