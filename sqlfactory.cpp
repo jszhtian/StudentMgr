@@ -1271,7 +1271,8 @@ bool listexam::inputdata(shared_ptr<queryexchange> input)
     if(input->ExchangeData->at(0)=="ZZU")
     {
         Uni="ZZU";
-        Query.prepare("SELECT [ExamUUID] ,Student.Name,Student.StudentID ,LectureinZZU.LectureName ,LectureinUDE.LectureName ,LectureinZZU.Type,[Examscore] ,[Examnote],[ZZUExam].[Semester],[Examdatestamp] FROM [dbo].[ZZUExam],[dbo].LectureinZZU,[dbo].LectureinUDE,dbo.LectureMap,dbo.Student where ZZUExam.LectureUUID=LectureinZZU.LectureUUID and LectureMap.UDELectureUUID=LectureinUDE.LectureUUID and LectureMap.ZZULectureUUID=LectureinZZU.LectureUUID and ZZUExam.StudentUUID=Student.StudentUUID");
+        //Query.prepare("SELECT [ExamUUID] ,Student.Name,Student.StudentID ,LectureinZZU.LectureName ,LectureinUDE.LectureName ,LectureinZZU.Type,[Examscore] ,[Examnote],[ZZUExam].[Semester],[Examdatestamp] FROM [dbo].[ZZUExam],[dbo].LectureinZZU,[dbo].LectureinUDE,dbo.LectureMap,dbo.Student where ZZUExam.LectureUUID=LectureinZZU.LectureUUID and LectureMap.UDELectureUUID=LectureinUDE.LectureUUID and LectureMap.ZZULectureUUID=LectureinZZU.LectureUUID and ZZUExam.StudentUUID=Student.StudentUUID");
+        Query.prepare("SELECT [ExamUUID] ,Student.Name,Student.StudentID ,LectureinZZU.LectureName ,LectureinUDE.LectureName ,LectureinZZU.Type,[Examscore] ,[Examnote],[ZZUExam].[Semester],[Examdatestamp] FROM ZZUExam left join Student on (ZZUExam.StudentUUID=Student.StudentUUID) left join LectureinZZU on (ZZUExam.LectureUUID=LectureinZZU.LectureUUID) left join LectureMap on (LectureMap.ZZULectureUUID=ZZUExam.LectureUUID) left join LectureinUDE on (LectureMap.UDELectureUUID=LectureinUDE.LectureUUID)");
         return true;
     }
     if(input->ExchangeData->at(0)=="SelectExam")
