@@ -35,6 +35,7 @@ SQLCommandBase *SQLFactory::CreateSQLCommand(QString COMname)
     }
     if(COMname.toLower()=="deletelecture")
     {
+        wcout<<"Call Function "<<COMname.toStdWString()<<endl;
         return new deletelecture;
     }
     if(COMname.toLower()=="deletelecturemap")
